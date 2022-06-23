@@ -10,18 +10,25 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
 
             - name: Install Node.js
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
-                  node-version: 13.x
+                  node-version: 16
 
-            - name: Install NPM packages
-              run: npm ci
+            - name: Install pnpm
+              uses: pnpm/action-setup@v2.0.1
+              id: pnpm-install
+              with:
+                  version: 7
+                  run_install: false
+
+            - name: Install dependencies
+              run: pnpm install
 
             - name: Build project
-              run: npm run build
+              run: pnpm run build
 
             - name: Deploy
               uses: JamesIves/github-pages-deploy-action@v4.2.2
