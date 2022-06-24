@@ -1,40 +1,62 @@
 import React, { useRef, useState } from 'react';
-import Canvas from './components/Canvas';
+import { PlotPreview } from './components/PlotPreview';
+import { PlotScope } from './components/PlotScope';
 import { Draw } from './types';
 
 interface AppProps {}
 
+interface Dotes {
+    x1: number | null;
+    x2: number | null;
+    y1: number | null;
+    y2: number | null;
+}
+
 export const App: React.FC<AppProps> = (props) => {
     const fileRef = useRef<HTMLInputElement>(null);
-    const [draw, setDraw] = useState<Draw | null>(null);
+    const [plotImgFile, setPlotImgFile] = useState<File | null>(null);
+    const [dotes, setDotes] = useState<Dotes>({
+        x1: null,
+        x2: null,
+        y1: null,
+        y2: null,
+    });
 
     const handleChange = () => {
-        if (!fileRef.current?.files) return;
+        if (!fileRef.current?.files?.length) return;
 
-        console.log(fileRef.current?.files);
+        console.log(fileRef.current.files[0]);
 
-        // const img = document.createElement('img');
-        // img.src = URL.createObjectURL(fileRef.current.files[0]);
-        // img.height = 60;
-        // img.onload = function () {
-        //     URL.revokeObjectURL(img.src);
-        // };
-
-        setDraw(() => (ctx: CanvasRenderingContext2D) => {
-            const img = new Image();
-            img.onload = function () {
-                ctx.drawImage(img, 0, 0, 1000, 500);
-            };
-            if (fileRef?.current?.files?.[0]) {
-                img.src = URL.createObjectURL(fileRef.current.files[0]);
-            }
-        });
+        setPlotImgFile(fileRef.current.files[0]);
     };
 
-    // const draw: Draw = (ctx) => {
-    //     ctx.fillStyle = 'lime';
-    //     ctx.fillRect(0, 0, 100, 100);
-    // };
+    const handleAddDot = (
+        ctx: CanvasRenderingContext2D,
+        y: number,
+        x: number
+    ) => {
+        for (const [key, value] of Object.entries(dotes)) {
+            if (value === null) {
+                if (key[0] === 'x') {
+                    ctx.fillStyle = 'lime';
+                    setDotes({ ...dotes, [key]: x });
+                } else {
+                    ctx.fillStyle = 'tomato';
+                    setDotes({ ...dotes, [key]: y });
+                }
+
+                ctx.beginPath();
+
+                ctx.fillText(key, x, y - 10);
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.closePath();
+
+                break;
+            }
+        }
+    };
 
     return (
         <div className="App">
@@ -44,17 +66,17 @@ export const App: React.FC<AppProps> = (props) => {
                 name="file"
                 onChange={handleChange}
             />
-            <div className="canvas-container">
-                {draw && (
-                    <Canvas
-                        className="canvas"
-                        draw={draw}
-                        style={{ width: '100%', height: '100%' }}
-                        width={1000}
-                        height={500}
-                    />
-                )}
-            </div>
+            {plotImgFile && (
+                <>
+                    <div className="canvas-container">
+                        <PlotPreview
+                            plotImgFile={plotImgFile}
+                            onClick={handleAddDot}
+                        />
+                    </div>
+                    <PlotScope />
+                </>
+            )}
         </div>
     );
 };
