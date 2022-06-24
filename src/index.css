@@ -6,6 +6,21 @@
     padding: 0;
 }
 
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    max-width: 1130px;
+    width: 100%;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.container--upload {
+    max-width: 500px;
+}
+
 .canvas {
     border: 1px solid black;
 }

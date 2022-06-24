@@ -33,13 +33,16 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
         if (!canvas || !context) return;
 
         const image = new Image();
+        image.src = URL.createObjectURL(plotImgFile);
         image.onload = () => {
             setCanvasBoundaries({ width: image.width, height: image.height });
             context.drawImage(image, 0, 0);
+            // sometimes image not drawing
+            // and there is a second draw after one frame
+            setTimeout(() => context.drawImage(image, 0, 0), 1000 / 60);
 
             // const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         };
-        image.src = URL.createObjectURL(plotImgFile);
     }, [plotImgFile]);
 
     // useEffect(() => {
