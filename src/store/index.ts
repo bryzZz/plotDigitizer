@@ -1,20 +1,23 @@
 import create from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
+import { Dot } from '../types';
 
-interface FileState {
-    file: File | null;
-    plotType: string | null;
-    setFile: (file: File) => void;
+interface UploadState {
+    imageObjectURL: string;
+    plotType: string;
+    dots: Dot[] | null;
+    setImageObjectURL: (image: string) => void;
     setPlotType: (plotType: string) => void;
+    setDots: (dots: Dot[]) => void;
 }
 
-export const useStore = create<FileState>()(
-    devtools(
-        persist((set) => ({
-            file: null,
-            plotType: null,
-            setFile: (file) => set(() => ({ file })),
-            setPlotType: (plotType) => set(() => ({ plotType })),
-        }))
-    )
+export const useUploadStore = create<UploadState>()(
+    devtools((set) => ({
+        imageObjectURL: '',
+        plotType: '',
+        dots: null,
+        setImageObjectURL: (imageObjectURL) => set(() => ({ imageObjectURL })),
+        setPlotType: (plotType) => set(() => ({ plotType })),
+        setDots: (dots) => set(() => ({ dots })),
+    }))
 );

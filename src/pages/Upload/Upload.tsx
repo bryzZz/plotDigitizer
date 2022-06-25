@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStore } from '../../store';
+import { useUploadStore } from '../../store';
 import { plotTypes } from '../../utils';
 import './style.css';
 
@@ -9,24 +9,36 @@ interface UploadProps {}
 const plotNames = Object.keys(plotTypes);
 
 export const Upload: React.FC<UploadProps> = (props) => {
-    const { file, setFile, plotType, setPlotType } = useStore((state) => state);
+    const {
+        imageObjectURL,
+        plotType,
+        setImageObjectURL,
+        setPlotType,
+        setDots,
+    } = useUploadStore();
     const navigate = useNavigate();
     const fileRef = useRef<HTMLInputElement>(null);
 
     const handleChangeFile = () => {
-        if (!fileRef.current?.files?.length) return;
+        const image = fileRef.current?.files?.[0];
+        if (!image) return;
 
-        console.log(fileRef.current.files[0]);
+        const url = URL.createObjectURL(image);
+        console.log(image, url);
 
-        setFile(fileRef.current.files[0]);
+        setImageObjectURL(url);
     };
 
     const handleChangePlotType = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPlotType(e.target.value);
+        // set dots for plot type
+        setDots(plotTypes[e.target.value].dots);
     };
 
-    const handleSubmit = () => {
-        if (file && plotType) {
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (imageObjectURL && plotType) {
             navigate('preview');
         }
     };
@@ -60,7 +72,9 @@ export const Upload: React.FC<UploadProps> = (props) => {
                         ))}
                     </div>
                 </div>
-                <button type="submit">Submit</button>
+                <button className="Upload__submit" type="submit">
+                    Submit
+                </button>
             </form>
         </div>
     );

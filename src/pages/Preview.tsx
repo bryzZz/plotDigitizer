@@ -1,30 +1,35 @@
 import React from 'react';
-import { useStore } from '../store';
+import { useUploadStore } from '../store';
 import { PlotPreview, PlotScope } from '../components';
 
 interface PreviewProps {}
 
 export const Preview: React.FC<PreviewProps> = (props) => {
-    const file = useStore((state) => state.file);
+    const { imageObjectURL, dots, setDots } = useUploadStore();
 
     const handleAddDot = (
         ctx: CanvasRenderingContext2D,
         y: number,
         x: number
     ) => {
-        for (const [key, value] of Object.entries(dotes)) {
+        // if something wrong with dots
+        if (!dots) return;
+
+        for (let i = 0; i < dots.length; i++) {
+            const { label, value, color, axis } = dots[i];
             if (value === null) {
-                if (key[0] === 'x') {
-                    ctx.fillStyle = 'lime';
-                    setDotes({ ...dotes, [key]: x });
-                } else {
-                    ctx.fillStyle = 'tomato';
-                    setDotes({ ...dotes, [key]: y });
-                }
+                setDots(
+                    dots.map((dot, index) =>
+                        i === index
+                            ? { ...dot, value: axis === 'x' ? x : y }
+                            : dot
+                    )
+                );
 
                 ctx.beginPath();
 
-                ctx.fillText(key, x, y - 10);
+                ctx.fillStyle = color;
+                ctx.fillText(label, x, y - 10);
                 ctx.arc(x, y, 5, 0, Math.PI * 2);
                 ctx.fill();
 
@@ -37,13 +42,10 @@ export const Preview: React.FC<PreviewProps> = (props) => {
 
     return (
         <div className="Preview">
-            {file && (
+            {imageObjectURL && (
                 <>
                     <div className="canvas-container">
-                        <PlotPreview
-                            plotImgFile={file}
-                            onClick={handleAddDot}
-                        />
+                        <PlotPreview onClick={handleAddDot} />
                     </div>
                     <PlotScope />
                 </>

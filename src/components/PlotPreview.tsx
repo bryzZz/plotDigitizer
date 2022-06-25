@@ -1,10 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
-// import { useCanvas } from '../hooks';
-import { Draw } from '../types';
+import { useUploadStore } from '../store';
 
 interface PlotPreviewProps {
-    plotImgFile: File;
-    draw?: Draw;
     onClick: (ctx: CanvasRenderingContext2D, y: number, x: number) => void;
     onMouseMove?: (ctx: CanvasRenderingContext2D, y: number, x: number) => void;
 }
@@ -15,12 +12,10 @@ interface CanvasBoundaries {
 }
 
 export const PlotPreview: React.FC<PlotPreviewProps> = ({
-    plotImgFile,
-    draw,
     onClick,
     onMouseMove,
 }) => {
-    // const canvasRef = useCanvas(draw);
+    const imageObjectURL = useUploadStore((state) => state.imageObjectURL);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [canvasBoundaries, setCanvasBoundaries] = useState<CanvasBoundaries>({
         width: 0,
@@ -30,30 +25,18 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas?.getContext('2d');
-        if (!canvas || !context) return;
+        if (!canvas || !context || !imageObjectURL) return;
 
-        const image = new Image();
-        image.src = URL.createObjectURL(plotImgFile);
-        image.onload = () => {
-            setCanvasBoundaries({ width: image.width, height: image.height });
-            context.drawImage(image, 0, 0);
-            // sometimes image not drawing
-            // and there is a second draw after one frame
-            setTimeout(() => context.drawImage(image, 0, 0), 1000 / 60);
+        const img = new Image();
+        img.src = imageObjectURL;
+        img.onload = () => {
+            setCanvasBoundaries({ width: img.width, height: img.height });
+            // sometimes the picture is not drawn if you do not do this
+            setTimeout(() => context.drawImage(img, 0, 0), 0);
 
             // const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         };
-    }, [plotImgFile]);
-
-    // useEffect(() => {
-    //     const canvas = canvasRef.current;
-    //     const context = canvas?.getContext('2d');
-    //     if (!canvas || !context) return;
-
-    //     draw(context);
-
-    //     console.log(context.getImageData(0, 0, 100, 100));
-    // }, [draw]);
+    }, [imageObjectURL]);
 
     const handleClick = (e: React.MouseEvent) => {
         const canvas = canvasRef.current;

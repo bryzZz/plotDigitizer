@@ -1,29 +1,20 @@
-interface PlotType {
-    label: string;
-    dots: {
-        [key: string]: number | null;
-    };
-}
-
-interface PlotTypes {
-    [key: string]: PlotType;
-}
+import { PlotTypes } from './types';
 
 export const plotTypes: PlotTypes = {
     XYPlot: {
         label: '2D x-y plot',
-        dots: {
-            x1: null,
-            x2: null,
-            y1: null,
-            y2: null,
-        },
+        dots: [
+            { label: 'y1', value: null, color: 'lime', axis: 'y' },
+            { label: 'y2', value: null, color: 'lime', axis: 'y' },
+            { label: 'x1', value: null, color: 'tomato', axis: 'x' },
+            { label: 'x2', value: null, color: 'tomato', axis: 'x' },
+        ],
     },
     BarPlot: {
         label: '2D Bar plot',
-        dots: {
-            x1: null,
-            x2: null,
-        },
+        dots: [
+            { label: 'p1', value: null, color: 'lime', axis: 'y' },
+            { label: 'p2', value: null, color: 'tomato', axis: 'y' },
+        ],
     },
 };
