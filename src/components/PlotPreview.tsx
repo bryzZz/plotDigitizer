@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useUploadStore } from '../store';
-import { Button } from '../types';
+import { Button, Coords2 } from '../types';
 import { drawDot } from '../utils';
 
 interface PlotPreviewProps {
     onClick: (y: number, x: number, button: Button) => void;
-    onMouseMove?: (ctx: CanvasRenderingContext2D, y: number, x: number) => void;
+    onMouseMove: (y: number, x: number) => void;
 }
 
 interface CanvasBoundaries {
@@ -23,8 +23,7 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
         width: 0,
         height: 0,
     });
-
-    useEffect(() => console.log('PlotPreview update'));
+    const [coords, setCoords] = useState<Coords2>({ x: 0, y: 0 });
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -52,9 +51,11 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault(); // disable context menu to handle right click
 
+        onClick(coords.y, coords.x, e.button);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
         const canvas = canvasRef.current;
-        // const context = canvas?.getContext('2d');
-        // if (!canvas || !context) return;
         if (!canvas) return;
 
         const { clientX, clientY } = e;
@@ -63,8 +64,9 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
         const y = clientY - top;
         const x = clientX - left;
 
-        onClick(y, x, e.button);
-        // draw(context);
+        setCoords({ y, x });
+
+        onMouseMove(y, x);
     };
 
     return (
@@ -72,6 +74,7 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
             ref={canvasRef}
             onClick={handleClick}
             onContextMenu={handleClick}
+            onMouseMove={handleMouseMove}
             width={canvasBoundaries.width}
             height={canvasBoundaries.height}
             style={{

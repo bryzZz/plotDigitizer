@@ -23,9 +23,9 @@ body {
 }
 
 .container--upload {
-    max-width: 500px;
+    max-width: 600px;
 }
 
-canvas {
+/* canvas {
     border: 1px solid black;
-}
+} */

@@ -19,3 +19,15 @@
     grid-column: 2;
     cursor: pointer;
 }
+
+.dropzone {
+    background: white;
+    border-radius: 5px;
+    border: 2px dashed rgb(0, 135, 247);
+    padding: 2rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.Upload__preview {
+    max-width: 100%;
+}
