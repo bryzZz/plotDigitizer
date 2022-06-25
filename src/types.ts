@@ -11,6 +11,7 @@ export type Dot = {
 
 export type PlotType = {
     label: string;
+    iconComponent: React.FunctionComponent;
     dots: Dot[];
 };
 

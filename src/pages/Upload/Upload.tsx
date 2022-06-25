@@ -1,10 +1,33 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
-import { Header } from '../../components';
+import { Header, CustomRadio } from '../../components';
 import { useUploadStore } from '../../store';
-import { plotTypes } from '../../utils';
+import { PlotTypes } from '../../types';
+import { ReactComponent as LineChart } from '../../assets/line-chart.svg';
+import { ReactComponent as BarChart } from '../../assets/bar-chart.svg';
 import './style.css';
+
+const plotTypes: PlotTypes = {
+    XYPlot: {
+        label: '2D x-y plot',
+        iconComponent: LineChart,
+        dots: [
+            { label: 'y1', coords: null, color: 'lime', axis: 'y' },
+            { label: 'y2', coords: null, color: 'lime', axis: 'y' },
+            { label: 'x1', coords: null, color: 'tomato', axis: 'x' },
+            { label: 'x2', coords: null, color: 'tomato', axis: 'x' },
+        ],
+    },
+    BarPlot: {
+        label: '2D Bar plot',
+        iconComponent: BarChart,
+        dots: [
+            { label: 'p1', coords: null, color: 'lime', axis: 'y' },
+            { label: 'p2', coords: null, color: 'tomato', axis: 'y' },
+        ],
+    },
+};
 
 interface UploadProps {}
 
@@ -46,7 +69,9 @@ export const Upload: React.FC<UploadProps> = (props) => {
             <div className="container container--upload">
                 <form onSubmit={handleSubmit} className="Upload__form">
                     <div className="Upload__file">
-                        <h3 className="Upload__subtitle">Choose plot image</h3>
+                        <h3 className="Upload__subtitle">
+                            Choose your plot image
+                        </h3>
                         <div {...getRootProps({ className: 'dropzone' })}>
                             <input {...getInputProps()} />
                             <p>Drop plot image here, or click to select</p>
@@ -67,16 +92,17 @@ export const Upload: React.FC<UploadProps> = (props) => {
                         </h3>
                         <div className="Upload__inputs">
                             {Object.keys(plotTypes).map((plotName) => (
-                                <label key={plotName}>
-                                    <input
-                                        checked={plotType === plotName}
-                                        value={plotName}
-                                        onChange={handleChangePlotType}
-                                        type="radio"
-                                        name="plot-type"
-                                    />
-                                    {plotTypes[plotName].label}
-                                </label>
+                                <CustomRadio
+                                    key={plotName}
+                                    checked={plotType === plotName}
+                                    value={plotName}
+                                    onChange={handleChangePlotType}
+                                    name="plot-type"
+                                    label={plotTypes[plotName].label}
+                                    IconComponent={
+                                        plotTypes[plotName].iconComponent
+                                    }
+                                />
                             ))}
                         </div>
                     </div>

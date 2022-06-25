@@ -1,24 +1,5 @@
 import { Coords2, PlotTypes } from './types';
 
-export const plotTypes: PlotTypes = {
-    XYPlot: {
-        label: '2D x-y plot',
-        dots: [
-            { label: 'y1', coords: null, color: 'lime', axis: 'y' },
-            { label: 'y2', coords: null, color: 'lime', axis: 'y' },
-            { label: 'x1', coords: null, color: 'tomato', axis: 'x' },
-            { label: 'x2', coords: null, color: 'tomato', axis: 'x' },
-        ],
-    },
-    BarPlot: {
-        label: '2D Bar plot',
-        dots: [
-            { label: 'p1', coords: null, color: 'lime', axis: 'y' },
-            { label: 'p2', coords: null, color: 'tomato', axis: 'y' },
-        ],
-    },
-};
-
 export const drawDot = (
     ctx: CanvasRenderingContext2D,
     y: number,
