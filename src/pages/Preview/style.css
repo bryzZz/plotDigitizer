@@ -1,0 +1,16 @@
+.Preview__container {
+    display: flex;
+
+    padding-left: var(--main-pad);
+}
+
+.canvas-container {
+    flex-grow: 1;
+    padding-top: 2rem;
+}
+
+.sidebar {
+    /* padding: 2rem 0 0 1rem; */
+    border-left: 1px solid #cccccc;
+    width: 250px;
+}

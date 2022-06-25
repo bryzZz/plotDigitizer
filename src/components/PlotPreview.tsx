@@ -4,12 +4,7 @@ import { Button } from '../types';
 import { drawDot } from '../utils';
 
 interface PlotPreviewProps {
-    onClick: (
-        ctx: CanvasRenderingContext2D,
-        y: number,
-        x: number,
-        button: Button
-    ) => void;
+    onClick: (y: number, x: number, button: Button) => void;
     onMouseMove?: (ctx: CanvasRenderingContext2D, y: number, x: number) => void;
 }
 
@@ -58,8 +53,9 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
         e.preventDefault(); // disable context menu to handle right click
 
         const canvas = canvasRef.current;
-        const context = canvas?.getContext('2d');
-        if (!canvas || !context) return;
+        // const context = canvas?.getContext('2d');
+        // if (!canvas || !context) return;
+        if (!canvas) return;
 
         const { clientX, clientY } = e;
         const { left, top } = canvas.getBoundingClientRect();
@@ -67,7 +63,7 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
         const y = clientY - top;
         const x = clientX - left;
 
-        onClick(context, y, x, e.button);
+        onClick(y, x, e.button);
         // draw(context);
     };
 

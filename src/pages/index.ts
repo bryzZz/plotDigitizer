@@ -1,2 +1,2 @@
 export * from './Upload/Upload';
-export * from './Preview';
+export * from './Preview/Preview';
