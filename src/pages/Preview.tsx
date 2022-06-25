@@ -1,55 +1,71 @@
 import React from 'react';
 import { useUploadStore } from '../store';
 import { PlotPreview, PlotScope } from '../components';
+import { distance, drawDot } from '../utils';
+import { Button, Dot } from '../types';
 
 interface PreviewProps {}
 
 export const Preview: React.FC<PreviewProps> = (props) => {
-    const { imageObjectURL, dots, setDots } = useUploadStore();
+    const { dots, setDots } = useUploadStore();
 
-    const handleAddDot = (
+    const handlePreviewClick = (
         ctx: CanvasRenderingContext2D,
         y: number,
-        x: number
+        x: number,
+        button: Button
     ) => {
         // if something wrong with dots
-        if (!dots) return;
+        if (!dots.length) return;
 
-        for (let i = 0; i < dots.length; i++) {
-            const { label, value, color, axis } = dots[i];
-            if (value === null) {
-                setDots(
-                    dots.map((dot, index) =>
-                        i === index
-                            ? { ...dot, value: axis === 'x' ? x : y }
-                            : dot
-                    )
-                );
+        // if button left -> just set coords for new dot
+        if (button === Button.Left) {
+            for (let i = 0; i < dots.length; i++) {
+                const { coords } = dots[i];
+                if (coords === null) {
+                    const newDots = [...dots];
+                    newDots[i].coords = { x, y };
+                    setDots(newDots);
 
-                ctx.beginPath();
+                    break;
+                }
+            }
+            // if button right -> find dot with minimal distance and delete
+        } else if (button === Button.Right) {
+            let minDistance = Infinity,
+                minDistanceDotIndex = -1;
 
-                ctx.fillStyle = color;
-                ctx.fillText(label, x, y - 10);
-                ctx.arc(x, y, 5, 0, Math.PI * 2);
-                ctx.fill();
+            dots.forEach((dot, index) => {
+                if (dot.coords !== null) {
+                    let _distance = distance(dot.coords, { x, y });
+                    console.log(_distance);
 
-                ctx.closePath();
+                    if (_distance < minDistance) {
+                        minDistance = _distance;
+                        minDistanceDotIndex = index;
+                    }
+                }
+            });
 
-                break;
+            if (minDistanceDotIndex !== -1 && minDistance <= 15) {
+                const newDots = [...dots];
+                newDots[minDistanceDotIndex].coords = null;
+                setDots(newDots);
             }
         }
     };
 
     return (
         <div className="Preview">
-            {imageObjectURL && (
-                <>
-                    <div className="canvas-container">
-                        <PlotPreview onClick={handleAddDot} />
-                    </div>
-                    <PlotScope />
-                </>
-            )}
+            <div className="canvas-container">
+                <PlotPreview onClick={handlePreviewClick} />
+            </div>
+            <aside className="sidebar">
+                <div className="sidebar__block">
+                    <h4 className="sidebar__subtitle">Dots management</h4>
+                </div>
+            </aside>
+            <PlotScope />
         </div>
     );
 };

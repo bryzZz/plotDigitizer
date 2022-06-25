@@ -1,8 +1,15 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useUploadStore } from '../store';
+import { Button } from '../types';
+import { drawDot } from '../utils';
 
 interface PlotPreviewProps {
-    onClick: (ctx: CanvasRenderingContext2D, y: number, x: number) => void;
+    onClick: (
+        ctx: CanvasRenderingContext2D,
+        y: number,
+        x: number,
+        button: Button
+    ) => void;
     onMouseMove?: (ctx: CanvasRenderingContext2D, y: number, x: number) => void;
 }
 
@@ -15,12 +22,14 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
     onClick,
     onMouseMove,
 }) => {
-    const imageObjectURL = useUploadStore((state) => state.imageObjectURL);
+    const { imageObjectURL, dots } = useUploadStore();
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [canvasBoundaries, setCanvasBoundaries] = useState<CanvasBoundaries>({
         width: 0,
         height: 0,
     });
+
+    useEffect(() => console.log('PlotPreview update'));
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -32,13 +41,22 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
         img.onload = () => {
             setCanvasBoundaries({ width: img.width, height: img.height });
             // sometimes the picture is not drawn if you do not do this
-            setTimeout(() => context.drawImage(img, 0, 0), 0);
+            setTimeout(() => {
+                context.drawImage(img, 0, 0);
+
+                dots.forEach(({ coords, color, label }) => {
+                    if (coords)
+                        drawDot(context, coords.y, coords.x, 5, color, label);
+                });
+            }, 0);
 
             // const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         };
-    }, [imageObjectURL]);
+    }, [imageObjectURL, dots]);
 
     const handleClick = (e: React.MouseEvent) => {
+        e.preventDefault(); // disable context menu to handle right click
+
         const canvas = canvasRef.current;
         const context = canvas?.getContext('2d');
         if (!canvas || !context) return;
@@ -49,7 +67,7 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
         const y = clientY - top;
         const x = clientX - left;
 
-        onClick(context, y, x);
+        onClick(context, y, x, e.button);
         // draw(context);
     };
 
@@ -57,6 +75,7 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
         <canvas
             ref={canvasRef}
             onClick={handleClick}
+            onContextMenu={handleClick}
             width={canvasBoundaries.width}
             height={canvasBoundaries.height}
             style={{

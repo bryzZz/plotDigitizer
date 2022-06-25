@@ -1,10 +1,12 @@
 export type DotColor = 'lime' | 'tomato';
 
+export type Coords2 = { x: number; y: number };
+
 export type Dot = {
     label: string;
     color: DotColor;
     axis: 'x' | 'y';
-    value: number | null;
+    coords: Coords2 | null;
 };
 
 export type PlotType = {
@@ -15,3 +17,8 @@ export type PlotType = {
 export type PlotTypes = {
     [key: string]: PlotType;
 };
+
+export const enum Button {
+    Left = 0,
+    Right = 2,
+}
