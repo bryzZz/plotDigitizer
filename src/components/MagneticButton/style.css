@@ -1,0 +1,29 @@
+.MagneticButton {
+    --light: #fff;
+    --dark: #707070;
+    --border: #c3c8de;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 0;
+    padding: 0 30px;
+    width: 160px;
+    height: 50px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--dark);
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 10px 30px rgba(#414856, 0.1);
+    transition: transform 0.1s linear, color 0.1s linear,
+        background 0.15s linear;
+
+    font: 400 16px 'Roboto', sans-serif;
+}
+.MagneticButton.fill {
+    border: 0;
+    color: var(--light);
+    background: var(--color-primary);
+}

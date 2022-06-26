@@ -4,14 +4,26 @@ import { useDropzone } from 'react-dropzone';
 import { Header, CustomRadio } from '../../components';
 import { useUploadStore } from '../../store';
 import { PlotTypes } from '../../types';
-import { ReactComponent as LineChart } from '../../assets/line-chart.svg';
-import { ReactComponent as BarChart } from '../../assets/bar-chart.svg';
+import { ReactComponent as LinePlot } from '../../assets/line-plot.svg';
+import { ReactComponent as ScatterPlot } from '../../assets/scatter-plot.svg';
+import { ReactComponent as BarPlot } from '../../assets/bar-plot.svg';
 import './style.css';
+import { MagneticButton } from '../../components/MagneticButton/MagneticButton';
 
 const plotTypes: PlotTypes = {
     XYPlot: {
-        label: '2D x-y plot',
-        iconComponent: LineChart,
+        label: 'x-y plot',
+        iconComponent: LinePlot,
+        dots: [
+            { label: 'y1', coords: null, color: 'lime', axis: 'y' },
+            { label: 'y2', coords: null, color: 'lime', axis: 'y' },
+            { label: 'x1', coords: null, color: 'tomato', axis: 'x' },
+            { label: 'x2', coords: null, color: 'tomato', axis: 'x' },
+        ],
+    },
+    ScatterPlot: {
+        label: 'Scatter plot',
+        iconComponent: ScatterPlot,
         dots: [
             { label: 'y1', coords: null, color: 'lime', axis: 'y' },
             { label: 'y2', coords: null, color: 'lime', axis: 'y' },
@@ -20,8 +32,8 @@ const plotTypes: PlotTypes = {
         ],
     },
     BarPlot: {
-        label: '2D Bar plot',
-        iconComponent: BarChart,
+        label: 'Bar plot',
+        iconComponent: BarPlot,
         dots: [
             { label: 'p1', coords: null, color: 'lime', axis: 'y' },
             { label: 'p2', coords: null, color: 'tomato', axis: 'y' },
@@ -68,7 +80,7 @@ export const Upload: React.FC<UploadProps> = (props) => {
             <Header />
             <div className="container container--upload">
                 <form onSubmit={handleSubmit} className="Upload__form">
-                    <div className="Upload__file">
+                    <div className="Upload__form-block">
                         <h3 className="Upload__subtitle">
                             Choose your plot image
                         </h3>
@@ -86,7 +98,7 @@ export const Upload: React.FC<UploadProps> = (props) => {
                             </>
                         )}
                     </div>
-                    <div className="Upload__plot-type">
+                    <div className="Upload__form-block">
                         <h3 className="Upload__subtitle">
                             Choose your plot type
                         </h3>
@@ -105,10 +117,13 @@ export const Upload: React.FC<UploadProps> = (props) => {
                                 />
                             ))}
                         </div>
+                        <MagneticButton
+                            className="Upload__submit fill"
+                            type="submit"
+                        >
+                            Submit
+                        </MagneticButton>
                     </div>
-                    <button className="Upload__submit" type="submit">
-                        Submit
-                    </button>
                 </form>
             </div>
         </div>
