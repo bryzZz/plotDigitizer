@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { useUploadStore } from '../../store';
-import { PlotPreview, PlotScope } from '../../components';
+import { useUploadStore } from '../../store/useUploadStore';
+import { Header, PlotPreview, PlotScope } from '../../components';
 import { distance } from '../../utils';
 import { Button, Coords2 } from '../../types';
 import './style.css';
+import { ColorPicker } from '../../components/ColorPicker/ColorPicker';
 
 interface PreviewProps {}
 
 export const Preview: React.FC<PreviewProps> = () => {
     const { dots, setDots } = useUploadStore();
-    const [mouseCoords, setMouseCoords] = useState<Coords2>({ x: 0, y: 0 });
+    // const [mouseCoords, setMouseCoords] = useState<Coords2>({ x: 0, y: 0 });
 
     const handlePreviewClick = (y: number, x: number, button: Button) => {
         // if something wrong with dots
@@ -51,13 +52,14 @@ export const Preview: React.FC<PreviewProps> = () => {
     };
 
     const handlePreviewMouseMove = (y: number, x: number) => {
-        setMouseCoords({ x, y });
+        // setMouseCoords({ x, y });
     };
 
     const scopeDraw = (ctx: CanvasRenderingContext2D) => {};
 
     return (
         <div className="Preview">
+            <Header />
             <div className="Preview__container">
                 <div className="canvas-container">
                     <PlotPreview
@@ -69,6 +71,10 @@ export const Preview: React.FC<PreviewProps> = () => {
                     <PlotScope draw={scopeDraw} />
                     <div className="sidebar__block">
                         <h4 className="sidebar__subtitle">Colors management</h4>
+                        <div className="sidebar__block-color">
+                            Background color
+                            <ColorPicker />
+                        </div>
                     </div>
                 </aside>
             </div>

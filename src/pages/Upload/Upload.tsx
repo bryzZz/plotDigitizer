@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { Header, CustomRadio } from '../../components';
-import { useUploadStore } from '../../store';
+import { useUploadStore } from '../../store/useUploadStore';
 import { PlotTypes } from '../../types';
 import { ReactComponent as LinePlot } from '../../assets/line-plot.svg';
 import { ReactComponent as ScatterPlot } from '../../assets/scatter-plot.svg';
@@ -89,13 +89,10 @@ export const Upload: React.FC<UploadProps> = (props) => {
                             <p>Drop plot image here, or click to select</p>
                         </div>
                         {imageObjectURL && (
-                            <>
-                                <span>preview:</span>
-                                <img
-                                    className="Upload__preview"
-                                    src={imageObjectURL}
-                                />
-                            </>
+                            <div className="Upload__preview">
+                                <span>Preview:</span>
+                                <img src={imageObjectURL} />
+                            </div>
                         )}
                     </div>
                     <div className="Upload__form-block">

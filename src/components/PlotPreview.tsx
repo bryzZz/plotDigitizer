@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useUploadStore } from '../store';
+import { useUploadStore } from '../store/useUploadStore';
 import { Button, Coords2 } from '../types';
 import { drawDot } from '../utils';
 
@@ -51,10 +51,6 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault(); // disable context menu to handle right click
 
-        onClick(coords.y, coords.x, e.button);
-    };
-
-    const handleMouseMove = (e: React.MouseEvent) => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
@@ -64,9 +60,18 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
         const y = clientY - top;
         const x = clientX - left;
 
-        setCoords({ y, x });
+        onClick(y, x, e.button);
+    };
 
-        onMouseMove(y, x);
+    const handleMouseMove = (e: React.MouseEvent) => {
+        // const canvas = canvasRef.current;
+        // if (!canvas) return;
+        // const { clientX, clientY } = e;
+        // const { left, top } = canvas.getBoundingClientRect();
+        // const y = clientY - top;
+        // const x = clientX - left;
+        // setCoords({ y, x });
+        // onMouseMove(y, x);
     };
 
     return (
@@ -81,6 +86,7 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
                 width: canvasBoundaries.width,
                 height: canvasBoundaries.height,
             }}
+            className="PlotPreview"
         />
     );
 };

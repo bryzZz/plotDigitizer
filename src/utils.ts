@@ -11,6 +11,8 @@ export const drawDot = (
     ctx.beginPath();
 
     ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    ctx.font = `400 ${radius} Roboto`;
     ctx.fillText(label, x, y - radius * 2);
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fill();

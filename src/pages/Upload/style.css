@@ -36,12 +36,33 @@
     background: var(--color-bg);
     color: var(--color-hint-text);
     border-radius: 5px;
-    border: 2px dashed var(--color-primary);
+    border: 2px dashed var(--color-border);
     padding: 1rem;
     margin-bottom: 1rem;
     min-height: 10rem;
+    cursor: pointer;
+
+    transition: border-color 0.3s;
+}
+
+.dropzone:hover,
+.dropzone:focus {
+    border-color: var(--color-primary);
 }
 
 .Upload__preview {
+    animation: appear 0.3s ease;
+}
+
+@keyframes appear {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.Upload__preview img {
     max-width: 100%;
 }
