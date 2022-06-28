@@ -1,0 +1,19 @@
+.PlotPreview {
+    position: relative;
+}
+
+.PlotPreview > canvas {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.PlotPreview .PlotPreview__image {
+    z-index: 1;
+}
+
+.PlotPreview .PlotPreview__dots {
+    z-index: 2;
+}

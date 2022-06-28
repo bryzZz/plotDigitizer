@@ -61,17 +61,13 @@ export const Upload: React.FC<UploadProps> = (props) => {
         },
     });
 
-    const handleChangePlotType = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPlotType(e.target.value);
-        // set dots for plot type
-        setDots(plotTypes[e.target.value].dots);
-    };
-
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (imageObjectURL && plotType) {
             navigate('preview');
+            // set dots for plot type
+            setDots(plotTypes[plotType].dots);
         }
     };
 
@@ -105,7 +101,9 @@ export const Upload: React.FC<UploadProps> = (props) => {
                                     key={plotName}
                                     checked={plotType === plotName}
                                     value={plotName}
-                                    onChange={handleChangePlotType}
+                                    onChange={(e) =>
+                                        setPlotType(e.target.value)
+                                    }
                                     name="plot-type"
                                     label={plotTypes[plotName].label}
                                     IconComponent={

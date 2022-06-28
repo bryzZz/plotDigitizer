@@ -23,3 +23,5 @@ export const enum Button {
     Left = 0,
     Right = 2,
 }
+
+export type RGB = { r: number; g: number; b: number };
