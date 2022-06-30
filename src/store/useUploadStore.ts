@@ -19,9 +19,12 @@ export const useUploadStore = create<UploadState>()(
         plotType: '',
         dots: [],
         imageColors: [],
-        setImageObjectURL: (imageObjectURL) => set(() => ({ imageObjectURL })),
-        setPlotType: (plotType) => set(() => ({ plotType })),
-        setDots: (dots) => set(() => ({ dots })),
-        setImageColors: (imageColors) => set(() => ({ imageColors })),
+        setImageObjectURL: (imageObjectURL) =>
+            set(() => ({ imageObjectURL }), false, 'setImageObjectURL'),
+        setPlotType: (plotType) =>
+            set(() => ({ plotType }), false, 'setPlotType'),
+        setDots: (dots) => set(() => ({ dots }), false, 'setDots'),
+        setImageColors: (imageColors) =>
+            set(() => ({ imageColors }), false, 'setImageColors'),
     }))
 );

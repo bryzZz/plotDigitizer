@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import './style.css';
 
-interface ColorPickerProps {}
+interface ColorPickerProps {
+    color: string;
+}
 
-export const ColorPicker: React.FC<ColorPickerProps> = (props) => {
-    const [color, setColor] = useState<string>('');
+export const ColorPicker: React.FC<ColorPickerProps> = ({ color }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const handleClick = () => {
@@ -12,7 +13,14 @@ export const ColorPicker: React.FC<ColorPickerProps> = (props) => {
     };
 
     return (
-        <div className="ColorPicker" data-color={color} onClick={handleClick}>
+        <div
+            className="ColorPicker"
+            data-color={color}
+            onClick={handleClick}
+            style={{
+                backgroundColor: color,
+            }}
+        >
             {color === '' ? <span>none</span> : ''}
             <div className={`ColorPicker__popup ${isOpen ? 'open' : ''}`}>
                 colors here

@@ -15,6 +15,7 @@ html {
     --color-hint-text: #8b8b8b;
     --color-border: #cccccc;
     --color-primary: rgb(0, 135, 247);
+    --color-primary-hover: rgb(35, 152, 248);
     --color-bg: #ffffff;
 }
 
