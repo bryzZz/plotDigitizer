@@ -35,6 +35,10 @@ body {
     max-width: 800px;
 }
 
+.eyedrop {
+    cursor: url(./assets/Eyedropper-icon.png) 0 16, default;
+}
+
 /* canvas {
     border: 1px solid black;
 } */

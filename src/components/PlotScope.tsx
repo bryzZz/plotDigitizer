@@ -8,12 +8,16 @@ export const PlotScope = React.forwardRef<HTMLCanvasElement, PlotScopeProps>(
             <canvas
                 className="PlotScope"
                 ref={ref}
-                width={250}
-                height={250}
+                width={240}
+                height={240}
                 style={{
-                    width: '250px',
-                    height: '250px',
-                    border: '1px solid tomato',
+                    width: '240px',
+                    height: '240px',
+                    border: '2px solid var(--color-border)',
+                    borderRadius: '6px',
+                    // boxShadow: '0 0 5px 2px rgba(0, 0, 0, 0.05)',
+                    // borderRight: '1px solid var(--color-border)',
+                    // borderBottom: '1px solid var(--color-border)',
                 }}
             ></canvas>
         );

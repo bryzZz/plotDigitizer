@@ -10,6 +10,7 @@ export const App: React.FC<AppProps> = (props) => {
             <Routes>
                 <Route path="plotDigitizer/" element={<Upload />} />
                 <Route path="plotDigitizer/preview" element={<Preview />} />
+                <Route path="*" element={<Upload />} />
             </Routes>
         </div>
     );

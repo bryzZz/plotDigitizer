@@ -1,14 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
-import { Header, CustomRadio } from '../../components';
+import { Header, CustomRadio, MagneticButton } from '../../components';
 import { useUploadStore } from '../../store/useUploadStore';
 import { PlotTypes } from '../../types';
 import { ReactComponent as LinePlot } from '../../assets/line-plot.svg';
 import { ReactComponent as ScatterPlot } from '../../assets/scatter-plot.svg';
 import { ReactComponent as BarPlot } from '../../assets/bar-plot.svg';
 import './style.css';
-import { MagneticButton } from '../../components/MagneticButton/MagneticButton';
 
 const plotTypes: PlotTypes = {
     XYPlot: {

@@ -25,5 +25,21 @@
 }
 
 .ColorPicker__popup.open {
-    display: block;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10000;
+}
+
+.ColorPicker__popup > div {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+}
+
+.ColorPicker__eyedrop {
+    background-image: url(../../assets/Eyedropper-icon.png);
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
 }

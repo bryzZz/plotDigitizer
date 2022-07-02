@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Header, PlotPreview, PlotScope } from '../../components';
-import { ColorPicker } from '../../components/ColorPicker/ColorPicker';
+import { useNavigate } from 'react-router-dom';
+import { Header, PlotPreview, PlotScope, ColorPicker } from '../../components';
+import { useGetColor } from '../../hooks/useGetColor';
 import { useUploadStore } from '../../store/useUploadStore';
 import { Button } from '../../types';
 import { distance } from '../../utils';
@@ -9,15 +10,19 @@ import './style.css';
 interface PreviewProps {}
 
 export const Preview: React.FC<PreviewProps> = () => {
-    const [scale, setScale] = useState<number>(1);
-    const [color, setColor] = useState<string>('');
-    const [isEyedrop, setIsEyedrop] = useState<boolean>(false);
     const [imageObjectURL, dots, setDots] = useUploadStore((state) => [
         state.imageObjectURL,
         state.dots,
         state.setDots,
     ]);
+    const navigate = useNavigate();
+    const { run: getDominantColors, result: dominantColors } = useGetColor();
+    const [scale, setScale] = useState<number>(1);
+    const [backgroundColor, setBackgroundColor] = useState<string>('');
+    const [foregroundColors, setForegroundColors] = useState<string[]>(['']);
+    const [isEyedrop, setIsEyedrop] = useState<boolean>(false);
     const { current: img } = useRef(new Image());
+    const { current: mouseCoords } = useRef({ x: 0, y: 0 });
     const imgRef = useRef<HTMLCanvasElement>(null);
     const dotsRef = useRef<HTMLCanvasElement>(null);
     const scopeRef = useRef<HTMLCanvasElement>(null);
@@ -30,11 +35,13 @@ export const Preview: React.FC<PreviewProps> = () => {
         setScale((p) => +(p + diff).toFixed(2));
     };
 
-    const handleClick = (x: number, y: number, button: Button) => {
+    const handleClick = (button: Button) => {
+        const { x, y } = mouseCoords;
         if (button === Button.Left && isEyedrop) {
             const imgContext = imgRef.current!.getContext('2d');
             const [r, g, b] = imgContext!.getImageData(x, y, 1, 1).data;
-            setColor(`rgb(${r}, ${g}, ${b})`);
+            setBackgroundColor(`rgb(${r}, ${g}, ${b})`);
+            setIsEyedrop(false);
             return;
         }
 
@@ -57,15 +64,16 @@ export const Preview: React.FC<PreviewProps> = () => {
             let minDistance = Infinity,
                 minDistanceDotIndex = -1;
 
-            dots.forEach((dot, index) => {
+            for (let i = dots.length - 1; i >= 0; i--) {
+                const dot = dots[i];
                 if (dot.coords !== null) {
                     let _distance = distance(dot.coords, { x, y });
                     if (_distance < minDistance) {
                         minDistance = _distance;
-                        minDistanceDotIndex = index;
+                        minDistanceDotIndex = i;
                     }
                 }
-            });
+            }
 
             if (minDistanceDotIndex !== -1 && minDistance <= 15) {
                 const newDots = [...dots];
@@ -76,43 +84,65 @@ export const Preview: React.FC<PreviewProps> = () => {
     };
 
     const handleMouseMove = (x: number, y: number) => {
-        const scopeContext = scopeRef.current!.getContext('2d');
+        Object.assign(mouseCoords, { x, y });
+        scopeDraw();
+    };
 
-        const gscale = 3;
-        const g = 250;
+    const handleChangeForegroundColor = (color: string, index: number) => {
+        const currentColors = [...foregroundColors];
+        currentColors[index] = color;
+        setForegroundColors(currentColors);
+    };
 
+    const scopeDraw = () => {
+        const { x, y } = mouseCoords,
+            scopeContext = scopeRef.current!.getContext('2d'),
+            scopeScale = 5,
+            size = 240;
+
+        // draw scope from image
         scopeContext!.drawImage(
             imgRef.current!,
-            x - g / gscale / 2,
-            y - g / gscale / 2,
-            g / gscale,
-            g / gscale,
+            x - size / scopeScale / 2,
+            y - size / scopeScale / 2,
+            size / scopeScale,
+            size / scopeScale,
             0,
             0,
-            g,
-            g
+            size,
+            size
         );
+        // draw scope from dots
         scopeContext!.drawImage(
             dotsRef.current!,
-            x - g / gscale / 2,
-            y - g / gscale / 2,
-            g / gscale,
-            g / gscale,
+            x * scale - (size * scale) / scopeScale / 2,
+            y * scale - (size * scale) / scopeScale / 2,
+            (size * scale) / scopeScale,
+            (size * scale) / scopeScale,
             0,
             0,
-            g,
-            g
+            size,
+            size
         );
 
+        // draw cross lines
         scopeContext!.beginPath();
-        scopeContext!.strokeStyle = 'tomato';
-        scopeContext!.moveTo(g / 2, 0);
-        scopeContext!.lineTo(g / 2, 250);
-        scopeContext!.moveTo(0, g / 2);
-        scopeContext!.lineTo(250, g / 2);
+        scopeContext!.strokeStyle = 'var(--color-border)';
+        scopeContext!.lineWidth = 0.5;
+        scopeContext!.moveTo(size / 2, 0);
+        scopeContext!.lineTo(size / 2, size);
+        scopeContext!.moveTo(0, size / 2);
+        scopeContext!.lineTo(size, size / 2);
         scopeContext!.stroke();
         scopeContext!.closePath();
     };
+
+    useEffect(() => {
+        if (!imageObjectURL) {
+            navigate('/plotDigitizer/');
+            return;
+        }
+    }, [imageObjectURL]);
 
     useEffect(() => {
         const context = imgRef.current!.getContext('2d');
@@ -129,13 +159,18 @@ export const Preview: React.FC<PreviewProps> = () => {
                     canvasHeight
                 );
 
-                // setTimeout(() => {
-                //     const colors = getColors(imageData.data);
-                //     setImageColors(colors.splice(0, 5));
-                // }, 0);
+                // console.log(
+                //     imgRef!.current
+                //         ?.toDataURL()
+                //         .replace(/^data:image\/(png|jpg);base64,/, '')
+                // );
+
+                getDominantColors(imageData.data);
             },
             { once: true }
         );
+
+        scopeDraw();
     }, [img]);
 
     useEffect(() => {
@@ -159,6 +194,7 @@ export const Preview: React.FC<PreviewProps> = () => {
 
             context!.closePath();
         });
+        scopeDraw();
     }, [dots, scale]);
 
     // useEffect(() => {
@@ -176,6 +212,7 @@ export const Preview: React.FC<PreviewProps> = () => {
                 </div>
                 <div className="canvas-container">
                     <PlotPreview
+                        className={isEyedrop ? 'eyedrop' : ''}
                         scale={scale}
                         width={canvasWidth}
                         height={canvasHeight}
@@ -191,7 +228,24 @@ export const Preview: React.FC<PreviewProps> = () => {
                         <h4 className="sidebar__subtitle">Colors management</h4>
                         <div className="sidebar__block-color">
                             Background color
-                            <ColorPicker color={color} />
+                            <ColorPicker
+                                color={backgroundColor}
+                                variants={dominantColors}
+                                onChange={setBackgroundColor}
+                                onEyedrop={() => setIsEyedrop(true)}
+                            />
+                            Foreground color
+                            {foregroundColors.map((foregroundColor, i) => (
+                                <ColorPicker
+                                    key={foregroundColor}
+                                    color={foregroundColor}
+                                    variants={dominantColors}
+                                    onChange={(color) =>
+                                        handleChangeForegroundColor(color, i)
+                                    }
+                                    onEyedrop={() => setIsEyedrop(true)}
+                                />
+                            ))}
                         </div>
                     </div>
                 </aside>

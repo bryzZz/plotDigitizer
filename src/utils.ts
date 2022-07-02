@@ -18,7 +18,7 @@ export const getCoordsFromElement = (
     return { y, x };
 };
 
-export const getColors = (imageData: Uint8ClampedArray): [RGB, number][] => {
+export const getColors = (imageData: Uint8ClampedArray): [string, number][] => {
     const colors = new Map<string, number>();
 
     for (let i = 0; i < imageData.length; i += 4) {
@@ -34,11 +34,11 @@ export const getColors = (imageData: Uint8ClampedArray): [RGB, number][] => {
 
     const result = [...colors.entries()].sort((a, b) => b[1] - a[1]);
 
-    const rgbResult: [RGB, number][] = [];
-    for (const [k, v] of result) {
-        const sk = k.split(',').map(parseInt);
-        rgbResult.push([{ r: sk[0], g: sk[1], b: sk[2] }, v]);
-    }
+    // const rgbResult: [RGB, number][] = [];
+    // for (const [k, v] of result) {
+    //     const sk = k.split(',').map(parseInt);
+    //     rgbResult.push([{ r: sk[0], g: sk[1], b: sk[2] }, v]);
+    // }
 
-    return rgbResult;
+    return result;
 };
