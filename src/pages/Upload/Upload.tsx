@@ -5,6 +5,7 @@ import { Header, CustomRadio, MagneticButton } from '../../components';
 import { useUploadStore } from '../../store/useUploadStore';
 import { PlotTypes } from '../../types';
 import { ReactComponent as LinePlot } from '../../assets/line-plot.svg';
+import { ReactComponent as LineFilledPlot } from '../../assets/line-filled-plot.svg';
 import { ReactComponent as ScatterPlot } from '../../assets/scatter-plot.svg';
 import { ReactComponent as BarPlot } from '../../assets/bar-plot.svg';
 import './style.css';
@@ -22,7 +23,7 @@ const plotTypes: PlotTypes = {
     },
     line_filled: {
         label: 'x-y filled',
-        iconComponent: LinePlot,
+        iconComponent: LineFilledPlot,
         dots: [
             { label: 'y1', coords: null, color: 'lime', axis: 'y' },
             { label: 'y2', coords: null, color: 'lime', axis: 'y' },
