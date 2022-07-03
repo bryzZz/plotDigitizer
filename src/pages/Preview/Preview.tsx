@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header, PlotPreview, PlotScope, ColorPicker } from '../../components';
+import {
+    Header,
+    PlotPreview,
+    PlotScope,
+    ColorPicker,
+    MagneticButton,
+} from '../../components';
 import { useGetColor } from '../../hooks/useGetColor';
 import { useUploadStore } from '../../store/useUploadStore';
 import { Button } from '../../types';
@@ -10,11 +16,14 @@ import './style.css';
 interface PreviewProps {}
 
 export const Preview: React.FC<PreviewProps> = () => {
-    const [imageObjectURL, dots, setDots] = useUploadStore((state) => [
-        state.imageObjectURL,
-        state.dots,
-        state.setDots,
-    ]);
+    const [imageObjectURL, dots, plotType, setDots] = useUploadStore(
+        (state) => [
+            state.imageObjectURL,
+            state.dots,
+            state.plotType,
+            state.setDots,
+        ]
+    );
     const navigate = useNavigate();
     const { run: getDominantColors, result: dominantColors } = useGetColor();
     const [scale, setScale] = useState<number>(1);
@@ -29,7 +38,7 @@ export const Preview: React.FC<PreviewProps> = () => {
 
     img.src = imageObjectURL;
     const canvasWidth = img.width;
-    const canvasHeight = img.width;
+    const canvasHeight = img.height;
 
     const changeScale = (diff: number) => {
         setScale((p) => +(p + diff).toFixed(2));
@@ -92,6 +101,23 @@ export const Preview: React.FC<PreviewProps> = () => {
         const currentColors = [...foregroundColors];
         currentColors[index] = color;
         setForegroundColors(currentColors);
+    };
+
+    const handleSubmit = () => {
+        const body = {
+            image: imgRef!.current
+                ?.toDataURL()
+                .replace(/^data:image\/(png|jpg);base64,/, ''),
+            type: plotType,
+            color: [foregroundColors[0], backgroundColor],
+            dots: dots,
+        };
+        fetch('https://webplotdigitizer2049.herokuapp.com/', {
+            method: 'POST',
+            body: JSON.stringify(body),
+        })
+            .then((res) => res.text())
+            .then((res) => console.log(res));
     };
 
     const scopeDraw = () => {
@@ -158,12 +184,6 @@ export const Preview: React.FC<PreviewProps> = () => {
                     canvasWidth,
                     canvasHeight
                 );
-
-                // console.log(
-                //     imgRef!.current
-                //         ?.toDataURL()
-                //         .replace(/^data:image\/(png|jpg);base64,/, '')
-                // );
 
                 getDominantColors(imageData.data);
             },
@@ -248,6 +268,9 @@ export const Preview: React.FC<PreviewProps> = () => {
                             ))}
                         </div>
                     </div>
+                    <MagneticButton className="fill" onClick={handleSubmit}>
+                        Submit
+                    </MagneticButton>
                 </aside>
             </div>
         </div>

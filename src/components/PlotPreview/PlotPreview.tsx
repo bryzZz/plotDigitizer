@@ -45,11 +45,7 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
     return (
         <div
             className={`PlotPreview ${className}`}
-            style={{
-                width: width * scale,
-                height: height * scale,
-                border: '1px solid tomato',
-            }}
+            style={{ width: width * scale, height: height * scale }}
             onClick={handleClick}
             onContextMenu={handleClick}
             onMouseMove={handleMouseMove}

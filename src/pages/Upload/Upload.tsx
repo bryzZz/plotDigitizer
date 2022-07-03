@@ -10,7 +10,7 @@ import { ReactComponent as BarPlot } from '../../assets/bar-plot.svg';
 import './style.css';
 
 const plotTypes: PlotTypes = {
-    XYPlot: {
+    line: {
         label: 'x-y plot',
         iconComponent: LinePlot,
         dots: [
@@ -20,7 +20,17 @@ const plotTypes: PlotTypes = {
             { label: 'x2', coords: null, color: 'tomato', axis: 'x' },
         ],
     },
-    ScatterPlot: {
+    line_filled: {
+        label: 'x-y filled',
+        iconComponent: LinePlot,
+        dots: [
+            { label: 'y1', coords: null, color: 'lime', axis: 'y' },
+            { label: 'y2', coords: null, color: 'lime', axis: 'y' },
+            { label: 'x1', coords: null, color: 'tomato', axis: 'x' },
+            { label: 'x2', coords: null, color: 'tomato', axis: 'x' },
+        ],
+    },
+    points: {
         label: 'Scatter plot',
         iconComponent: ScatterPlot,
         dots: [
@@ -30,7 +40,7 @@ const plotTypes: PlotTypes = {
             { label: 'x2', coords: null, color: 'tomato', axis: 'x' },
         ],
     },
-    BarPlot: {
+    barplot: {
         label: 'Bar plot',
         iconComponent: BarPlot,
         dots: [

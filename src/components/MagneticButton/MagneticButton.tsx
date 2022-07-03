@@ -3,14 +3,16 @@ import './style.css';
 
 interface MagneticButtonProps {
     className?: string;
-    type: 'button' | 'submit' | 'reset' | undefined;
-    children: string;
+    type?: 'button' | 'submit' | 'reset' | undefined;
+    children?: string;
+    onClick?: (event: React.MouseEvent) => void;
 }
 
 export const MagneticButton: React.FC<MagneticButtonProps> = ({
-    className,
-    type,
-    children,
+    className = '',
+    type = 'button',
+    children = '',
+    onClick,
 }) => {
     const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -43,6 +45,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
             className={'MagneticButton ' + className || ''}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            onClick={onClick}
             type={type}
         >
             {children}

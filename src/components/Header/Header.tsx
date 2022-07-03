@@ -9,7 +9,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
         <header className="Header">
             <div className="container">
                 <Link to="/plotDigitizer" className="logo">
-                    plotDigitazer
+                    plotDigitizer
                 </Link>
             </div>
         </header>
