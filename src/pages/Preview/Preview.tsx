@@ -117,7 +117,10 @@ export const Preview: React.FC<PreviewProps> = () => {
             body: JSON.stringify(body),
         })
             .then((res) => res.text())
-            .then((res) => console.log(res));
+            .then((res) => {
+                console.log(res);
+                alert(res);
+            });
     };
 
     const scopeDraw = () => {
