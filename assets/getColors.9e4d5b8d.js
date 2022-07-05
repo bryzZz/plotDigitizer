@@ -1,1 +1,0 @@
-(function(){"use strict";const r=e=>{const o=new Map;for(let s=0;s<e.length;s+=4){const t=[e[s],e[s+1],e[s+2]].join(",");o.has(t)?o.set(t,o.get(t)+1):o.set(t,1)}return[...o.entries()].sort((s,t)=>t[1]-s[1])};onmessage=function(e){const n=r(e.data).map(([s])=>{const[t,c,l]=s.split(",");return`rgb(${t},${c},${l})`}).splice(0,5);postMessage(n)}})();
