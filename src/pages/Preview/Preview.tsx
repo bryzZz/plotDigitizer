@@ -9,7 +9,7 @@ import {
 } from '../../components';
 import { useGetColor } from '../../hooks/useGetColor';
 import { useUploadStore } from '../../store/useUploadStore';
-import { Button } from '../../types';
+import { Button, Coords2 } from '../../types';
 import { distance } from '../../utils';
 import './style.css';
 
@@ -39,10 +39,6 @@ export const Preview: React.FC<PreviewProps> = () => {
     img.src = imageObjectURL;
     const canvasWidth = img.width;
     const canvasHeight = img.height;
-
-    const changeScale = (diff: number) => {
-        setScale((p) => +(p + diff).toFixed(2));
-    };
 
     const handleClick = (button: Button) => {
         const { x, y } = mouseCoords;
@@ -94,7 +90,12 @@ export const Preview: React.FC<PreviewProps> = () => {
 
     const handleMouseMove = (x: number, y: number) => {
         Object.assign(mouseCoords, { x, y });
-        scopeDraw();
+        drawScope(
+            mouseCoords,
+            scopeRef.current!.getContext('2d')!,
+            imgRef.current!,
+            dotsRef.current!
+        );
     };
 
     const handleChangeForegroundColor = (color: string, index: number) => {
@@ -123,15 +124,54 @@ export const Preview: React.FC<PreviewProps> = () => {
             });
     };
 
-    const scopeDraw = () => {
-        const { x, y } = mouseCoords,
-            scopeContext = scopeRef.current!.getContext('2d'),
-            scopeScale = 5,
-            size = 240;
+    const drawImage = (context: CanvasRenderingContext2D) => {
+        return new Promise<void>((res) => {
+            img.addEventListener(
+                'load',
+                () => {
+                    context.drawImage(img, 0, 0);
+                    res();
+                },
+                { once: true }
+            );
+        });
+    };
+
+    const drawDots = (
+        context: CanvasRenderingContext2D,
+        radius: number = 5
+    ) => {
+        dots.forEach(({ coords, color, label }) => {
+            if (!coords) return;
+            const y = coords.y * scale,
+                x = coords.x * scale;
+
+            context.beginPath();
+
+            context.fillStyle = color;
+            context.textAlign = 'center';
+            context.font = `400 14px Roboto`;
+            context.fillText(label, x, y - radius * 2);
+            context.arc(x, y, radius, 0, Math.PI * 2);
+            context.fill();
+
+            context.closePath();
+        });
+    };
+
+    const drawScope = (
+        mouseCoords: Coords2,
+        context: CanvasRenderingContext2D,
+        imgCanvas: HTMLCanvasElement,
+        dotsCanvas: HTMLCanvasElement,
+        scopeScale: number = 5,
+        size: number = 250
+    ) => {
+        const { x, y } = mouseCoords;
 
         // draw scope from image
-        scopeContext!.drawImage(
-            imgRef.current!,
+        context.drawImage(
+            imgCanvas,
             x - size / scopeScale / 2,
             y - size / scopeScale / 2,
             size / scopeScale,
@@ -142,8 +182,8 @@ export const Preview: React.FC<PreviewProps> = () => {
             size
         );
         // draw scope from dots
-        scopeContext!.drawImage(
-            dotsRef.current!,
+        context.drawImage(
+            dotsCanvas,
             x * scale - (size * scale) / scopeScale / 2,
             y * scale - (size * scale) / scopeScale / 2,
             (size * scale) / scopeScale,
@@ -155,15 +195,15 @@ export const Preview: React.FC<PreviewProps> = () => {
         );
 
         // draw cross lines
-        scopeContext!.beginPath();
-        scopeContext!.strokeStyle = 'var(--color-border)';
-        scopeContext!.lineWidth = 0.5;
-        scopeContext!.moveTo(size / 2, 0);
-        scopeContext!.lineTo(size / 2, size);
-        scopeContext!.moveTo(0, size / 2);
-        scopeContext!.lineTo(size, size / 2);
-        scopeContext!.stroke();
-        scopeContext!.closePath();
+        context.beginPath();
+        context.strokeStyle = 'var(--color-border)';
+        context.lineWidth = 0.5;
+        context.moveTo(size / 2, 0);
+        context.lineTo(size / 2, size);
+        context.moveTo(0, size / 2);
+        context.lineTo(size, size / 2);
+        context.stroke();
+        context.closePath();
     };
 
     useEffect(() => {
@@ -174,50 +214,36 @@ export const Preview: React.FC<PreviewProps> = () => {
     }, [imageObjectURL]);
 
     useEffect(() => {
-        const context = imgRef.current!.getContext('2d');
-
-        img.addEventListener(
-            'load',
-            () => {
-                console.log('PlotImage update img');
-                context!.drawImage(img, 0, 0);
-                const imageData = context!.getImageData(
-                    0,
-                    0,
-                    canvasWidth,
-                    canvasHeight
-                );
-
-                getDominantColors(imageData.data);
-            },
-            { once: true }
+        const imgContext = imgRef.current!.getContext('2d')!;
+        drawImage(imgContext).then(() => {
+            console.log('img drawn');
+            const imageData = imgContext.getImageData(
+                0,
+                0,
+                canvasWidth,
+                canvasHeight
+            );
+            getDominantColors(imageData.data);
+        });
+        drawScope(
+            mouseCoords,
+            scopeRef.current!.getContext('2d')!,
+            imgRef.current!,
+            dotsRef.current!
         );
-
-        scopeDraw();
     }, [img]);
 
     useEffect(() => {
-        const context = dotsRef.current!.getContext('2d');
-        const radius = 5;
+        const context = dotsRef.current!.getContext('2d')!;
 
-        context!.clearRect(0, 0, canvasWidth * scale, canvasHeight * scale);
-        dots.forEach(({ coords, color, label }) => {
-            if (!coords) return;
-            const y = coords.y * scale,
-                x = coords.x * scale;
-
-            context!.beginPath();
-
-            context!.fillStyle = color;
-            context!.textAlign = 'center';
-            context!.font = `400 14px Roboto`;
-            context!.fillText(label, x, y - radius * 2);
-            context!.arc(x, y, radius, 0, Math.PI * 2);
-            context!.fill();
-
-            context!.closePath();
-        });
-        scopeDraw();
+        context.clearRect(0, 0, canvasWidth * scale, canvasHeight * scale);
+        drawDots(context);
+        drawScope(
+            mouseCoords,
+            scopeRef.current!.getContext('2d')!,
+            imgRef.current!,
+            dotsRef.current!
+        );
     }, [dots, scale]);
 
     // useEffect(() => {
@@ -228,23 +254,19 @@ export const Preview: React.FC<PreviewProps> = () => {
         <div className="Preview">
             <Header />
             <div className="Preview__container container">
-                <div className="Preview__scale">
-                    <button onClick={() => changeScale(-0.1)}>-</button>
-                    <button onClick={() => changeScale(0.1)}>+</button>
-                    <button onClick={() => setScale(1)}>100%</button>
-                </div>
-                <div className="canvas-container">
-                    <PlotPreview
-                        className={isEyedrop ? 'eyedrop' : ''}
-                        scale={scale}
-                        width={canvasWidth}
-                        height={canvasHeight}
-                        imgRef={imgRef}
-                        dotsRef={dotsRef}
-                        onClick={handleClick}
-                        onMouseMove={handleMouseMove}
-                    />
-                </div>
+                <PlotPreview
+                    className={
+                        'canvas-container ' + (isEyedrop ? 'eyedrop' : '')
+                    }
+                    scale={scale}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    imgRef={imgRef}
+                    dotsRef={dotsRef}
+                    onClick={handleClick}
+                    onMouseMove={handleMouseMove}
+                    setScale={setScale}
+                />
                 <aside className="sidebar">
                     <PlotScope ref={scopeRef} />
                     <div className="sidebar__block">
@@ -271,7 +293,7 @@ export const Preview: React.FC<PreviewProps> = () => {
                             ))}
                         </div>
                     </div>
-                    <MagneticButton className="fill" onClick={handleSubmit}>
+                    <MagneticButton onClick={handleSubmit} size="small">
                         Submit
                     </MagneticButton>
                 </aside>

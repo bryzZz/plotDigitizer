@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button } from '../../types';
+import { PlotPreviewSettings } from './PlotPreviewSettings';
 import './style.css';
 
 interface PlotPreviewProps {
@@ -11,6 +12,7 @@ interface PlotPreviewProps {
     dotsRef: React.RefObject<HTMLCanvasElement>;
     onClick: (button: Button) => void;
     onMouseMove: (x: number, y: number) => void;
+    setScale: (value: React.SetStateAction<number>) => void;
 }
 
 export const PlotPreview: React.FC<PlotPreviewProps> = ({
@@ -22,6 +24,7 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
     dotsRef,
     onClick,
     onMouseMove,
+    setScale,
 }) => {
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault(); // disable context menu to handle right click
@@ -43,25 +46,28 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({
     });
 
     return (
-        <div
-            className={`PlotPreview ${className}`}
-            style={{ width: width * scale, height: height * scale }}
-            onClick={handleClick}
-            onContextMenu={handleClick}
-            onMouseMove={handleMouseMove}
-        >
-            <canvas
-                className="PlotPreview__image"
-                ref={imgRef}
-                width={width}
-                height={height}
-            />
-            <canvas
-                className="PlotPreview__dots"
-                ref={dotsRef}
-                width={width * scale}
-                height={height * scale}
-            />
+        <div className={`PlotPreview ${className}`}>
+            <PlotPreviewSettings setScale={setScale} />
+            <div
+                className="PlotPreview__canvases"
+                style={{ width: width * scale, height: height * scale }}
+                onClick={handleClick}
+                onContextMenu={handleClick}
+                onMouseMove={handleMouseMove}
+            >
+                <canvas
+                    className="PlotPreview__image"
+                    ref={imgRef}
+                    width={width}
+                    height={height}
+                />
+                <canvas
+                    className="PlotPreview__dots"
+                    ref={dotsRef}
+                    width={width * scale}
+                    height={height * scale}
+                />
+            </div>
         </div>
     );
 };

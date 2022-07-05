@@ -1,29 +1,54 @@
 .MagneticButton {
-    --light: #fff;
-    --dark: #707070;
-    --border: #c3c8de;
+    --width: 160px;
+    --height: 50px;
+    --padding: 30px;
+    --fz: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
+
     position: relative;
-    border: 0;
-    padding: 0 30px;
-    width: 160px;
-    height: 50px;
-    border-radius: 2px;
-    border: 1px solid var(--border);
-    background: none;
-    color: var(--dark);
-    cursor: pointer;
+
     outline: none;
+    border: none;
+    border-radius: 2px;
+
+    background: none;
+
+    cursor: pointer;
     box-shadow: 0 10px 30px rgba(#414856, 0.1);
     transition: transform 0.1s linear, color 0.1s linear,
         background 0.15s linear;
 
-    font: 400 16px 'Roboto', sans-serif;
+    font: inherit;
 }
-.MagneticButton.fill {
-    border: 0;
-    color: var(--light);
+
+.MagneticButton__small {
+    padding: 0 calc(var(--padding) * 0.8);
+    width: calc(var(--width) * 0.7);
+    height: calc(var(--height) * 0.8);
+    font-size: calc(var(--fz) * 0.9);
+}
+.MagneticButton__medium {
+    padding: 0 var(--padding);
+    width: var(--width);
+    height: var(--height);
+    font-size: var(--fz);
+}
+.MagneticButton__big {
+    padding: 0 calc(var(--padding) * 1.2);
+    width: calc(var(--width) * 1.2);
+    height: calc(var(--height) * 1.2);
+    font-size: calc(var(--fz) * 1.2);
+}
+
+.MagneticButton__fill {
+    border: none;
+    color: var(--color-bg);
     background: var(--color-primary);
+}
+.MagneticButton__stroke {
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    background: transparent;
 }

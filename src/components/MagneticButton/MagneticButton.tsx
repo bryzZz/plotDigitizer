@@ -1,18 +1,21 @@
 import React, { useRef } from 'react';
 import './style.css';
 
-interface MagneticButtonProps {
-    className?: string;
-    type?: 'button' | 'submit' | 'reset' | undefined;
-    children?: string;
-    onClick?: (event: React.MouseEvent) => void;
+interface MagneticButtonProps
+    extends React.DetailedHTMLProps<
+        React.ButtonHTMLAttributes<HTMLButtonElement>,
+        HTMLButtonElement
+    > {
+    size?: 'small' | 'medium' | 'big';
+    styleType?: 'fill' | 'stroke';
 }
 
 export const MagneticButton: React.FC<MagneticButtonProps> = ({
     className = '',
-    type = 'button',
-    children = '',
-    onClick,
+    children,
+    size = 'medium',
+    styleType = 'fill',
+    ...other
 }) => {
     const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -42,11 +45,10 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
     return (
         <button
             ref={buttonRef}
-            className={'MagneticButton ' + className || ''}
+            className={`MagneticButton MagneticButton__${size} MagneticButton__${styleType} ${className}`}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            onClick={onClick}
-            type={type}
+            {...other}
         >
             {children}
         </button>
