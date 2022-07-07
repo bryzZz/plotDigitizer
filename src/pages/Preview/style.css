@@ -27,35 +27,6 @@
     z-index: 100;
 }
 
-.Preview__scale > button {
-    font-size: 1rem;
-    font-family: inherit;
-    font-weight: 400;
-    color: var(--color-bg);
-    border: none;
-    outline: none;
-    background-color: var(--color-primary);
-    height: 1.3rem;
-    padding: 0 0.4rem;
-    border-radius: 2px;
-    cursor: pointer;
-
-    transition: background-color 0.3s;
-}
-
-.Preview__scale > button:hover {
-    background-color: var(--color-primary-hover);
-}
-
-.Preview__scale > button:nth-child(1),
-.Preview__scale > button:nth-child(2) {
-    width: 1.3rem;
-}
-
-.Preview__scale > button:nth-child(3) {
-    font-size: 0.9rem;
-}
-
 .canvas-container {
     padding-top: 2rem;
     border-bottom: 1px solid var(--color-border);
