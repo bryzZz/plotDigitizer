@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { Coords2 } from '../types';
+import { Coords2, DominantColor } from '../types';
 
 function createCtx<A extends {} | null>() {
     const ctx = createContext<A | undefined>(undefined);
@@ -24,11 +24,12 @@ interface PreviewContextState {
     colors: string[];
     selectedColorIndex: number;
     isEyedrop: boolean;
-    dominantColors: string[];
+    dominantColors: DominantColor[];
     setScale: React.Dispatch<React.SetStateAction<number>>;
     setColors: React.Dispatch<React.SetStateAction<string[]>>;
     setIsEyedrop: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectedColorIndex: React.Dispatch<React.SetStateAction<number>>;
+    calculateDominantColors: (data: Uint8ClampedArray) => void;
 }
 
 export const [usePreviewContext, PreviewContextProvider] =

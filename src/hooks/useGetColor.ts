@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import { DominantColor } from '../types';
 
 export const useGetColor = () => {
-    const [result, setResult] = useState<string[]>([]);
+    const [result, setResult] = useState<DominantColor[]>([]);
     const workerRef = useRef<Worker>();
 
     useEffect(() => {
@@ -12,7 +13,7 @@ export const useGetColor = () => {
             }
         );
         workerRef.current = worker;
-        worker.onmessage = (event) => {
+        worker.onmessage = (event: MessageEvent<DominantColor[]>) => {
             setResult(event.data);
         };
 

@@ -24,6 +24,7 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({ className }) => {
         isEyedrop,
         setColors,
         setIsEyedrop,
+        calculateDominantColors,
     } = usePreviewContext();
     const [dots, setDots] = useUploadStore((state) => [
         state.dots,
@@ -130,16 +131,16 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({ className }) => {
     useEffect(() => {
         const imgContext = imgCanvasRef.current!.getContext('2d')!;
         drawImage(imgContext).then(() => {
-            console.log('img drawn');
+            // console.log('img drawn');
             const imageData = imgContext.getImageData(
                 0,
                 0,
                 canvasWidth,
                 canvasHeight
             );
-            // getDominantColors(imageData.data);
+            calculateDominantColors(imageData.data);
         });
-    }, [imgRef!.current]);
+    }, [imgRef.current]);
 
     useEffect(() => {
         const context = dotsCanvasRef.current!.getContext('2d')!;

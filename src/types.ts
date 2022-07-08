@@ -25,3 +25,10 @@ export const enum Button {
 }
 
 export type RGB = { r: number; g: number; b: number };
+export type DominantColor = {
+    r: number;
+    g: number;
+    b: number;
+    pixelsCount: number;
+    percentage: number;
+};

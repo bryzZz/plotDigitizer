@@ -1,50 +1,71 @@
 import React from 'react';
 import { usePreviewContext } from '../../context/PreviewContext';
 import { ColorPicker, MagneticButton, PlotScope } from '../index';
+import './style.css';
 
 interface SidebarProps {
     onSubmit: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ onSubmit }) => {
-    const { colors, dominantColors, setIsEyedrop, setSelectedColorIndex } =
-        usePreviewContext();
+    const {
+        colors,
+        dominantColors,
+        setColors,
+        setIsEyedrop,
+        setSelectedColorIndex,
+    } = usePreviewContext();
 
     const handleClickEyedrop = (index: number) => {
         setIsEyedrop(true);
         setSelectedColorIndex(index);
     };
 
-    const handleChangeColor = (color: string, index: number) => {};
+    const handleChangeColor = (color: string, index: number) => {
+        const newColors = [...colors];
+        newColors[index] = color;
+        setColors(newColors);
+    };
 
     return (
         <aside className="Sidebar">
             <PlotScope />
-            <div className="sidebar__block">
-                <h4 className="sidebar__subtitle">Colors management</h4>
-                <div className="sidebar__block-color">
-                    <p className="sidebar__block-subtitle">Background color</p>
-                    <ColorPicker
-                        color={colors[0]}
-                        variants={dominantColors}
-                        onChange={(color) => handleChangeColor(color, 0)}
-                        onEyedrop={() => handleClickEyedrop(0)}
-                    />
-                    <p className="sidebar__block-subtitle">Plot color</p>
-                    {colors.slice(1).map((foregroundColor, i) => (
+            <div className="Sidebar__block">
+                <h4 className="Sidebar__subtitle">Colors management</h4>
+                <div className="Sidebar__block-color">
+                    <div>
+                        <p className="Sidebar__block-subtitle">
+                            Background color:
+                        </p>
                         <ColorPicker
-                            key={foregroundColor}
-                            color={foregroundColor}
+                            color={colors[0]}
                             variants={dominantColors}
-                            onChange={(color) =>
-                                handleChangeColor(color, i + 1)
-                            }
-                            onEyedrop={() => handleClickEyedrop(i + 1)}
+                            onChange={(color) => handleChangeColor(color, 0)}
+                            onEyedrop={() => handleClickEyedrop(0)}
                         />
+                    </div>
+                    {colors.slice(1).map((foregroundColor, i) => (
+                        <div key={foregroundColor}>
+                            <p className="Sidebar__block-subtitle">
+                                Plot color:
+                            </p>
+                            <ColorPicker
+                                color={foregroundColor}
+                                variants={dominantColors}
+                                onChange={(color) =>
+                                    handleChangeColor(color, i + 1)
+                                }
+                                onEyedrop={() => handleClickEyedrop(i + 1)}
+                            />
+                        </div>
                     ))}
                 </div>
             </div>
-            <MagneticButton onClick={onSubmit} size="small">
+            <MagneticButton
+                className="Sidebar__submit"
+                onClick={onSubmit}
+                size="small"
+            >
                 Submit
             </MagneticButton>
         </aside>

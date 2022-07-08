@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { DominantColor } from '../../types';
 import './style.css';
 
 interface ColorPickerProps {
     color: string;
-    variants: string[];
+    variants: DominantColor[];
     onChange: (color: string) => void;
     onEyedrop: () => void;
 }
@@ -31,11 +32,13 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
         >
             {color === '' ? <span>none</span> : ''}
             <div className={`ColorPicker__popup ${isOpen ? 'open' : ''}`}>
-                {variants.map((variant) => (
+                {variants.map(({ r, g, b }, i) => (
                     <div
-                        key={variant}
-                        onClick={() => onChange(variant)}
-                        style={{ backgroundColor: variant }}
+                        key={i}
+                        onClick={() => onChange(`rgb(${r},${g},${b})`)}
+                        style={{
+                            backgroundColor: `rgb(${r},${g},${b})`,
+                        }}
                     ></div>
                 ))}
                 <div

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Header, PlotPreview } from '../../components';
-import { Sidebar } from '../../components/Sidebar/Sidebar';
+import { Header, PlotPreview, Sidebar } from '../../components';
 import { PreviewContextProvider } from '../../context/PreviewContext';
 import { useGetColor } from '../../hooks/useGetColor';
 import { useUploadStore } from '../../store/useUploadStore';
@@ -14,7 +13,8 @@ export const Preview: React.FC<PreviewProps> = () => {
         state.plotType,
         state.dots,
     ]);
-    const { run: getDominantColors, result: dominantColors } = useGetColor();
+    const { run: calculateDominantColors, result: dominantColors } =
+        useGetColor();
     const [scale, setScale] = useState<number>(1);
     const [colors, setColors] = useState<string[]>(['', '']);
     const [selectedColorIndex, setSelectedColorIndex] = useState<number>(0);
@@ -75,6 +75,7 @@ export const Preview: React.FC<PreviewProps> = () => {
                 setColors,
                 setIsEyedrop,
                 setSelectedColorIndex,
+                calculateDominantColors,
             }}
         >
             <div className="Preview">

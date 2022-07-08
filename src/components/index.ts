@@ -3,4 +3,5 @@ export * from './CustomRadio/CustomRadio';
 export * from './Header/Header';
 export * from './MagneticButton/MagneticButton';
 export * from './PlotPreview/PlotPreview';
-export * from './PlotScope';
+export * from './PlotScope/PlotScope';
+export * from './Sidebar/Sidebar';
