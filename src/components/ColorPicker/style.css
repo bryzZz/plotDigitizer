@@ -22,12 +22,13 @@
     display: none;
     position: absolute;
     bottom: -100%;
+    right: 0;
 }
 
 .ColorPicker__popup.open {
     display: flex;
     gap: 0.5rem;
-    z-index: 10000;
+    z-index: 100;
 }
 
 .ColorPicker__popup > div {

@@ -1,7 +1,13 @@
-import { Coords2, DominantColor } from './types';
+import { Coords2, DominantColor, HEX, HSL, RGB } from './types';
 
 export function distance(a: Coords2, b: Coords2) {
     return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+}
+
+export function clamp(min: number, value: number, max: number) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
 }
 
 class ColorGroup {
@@ -110,4 +116,57 @@ export function getDominantColors(
     }
 
     return result;
+}
+
+export const colorVariants = ['RGB', 'HEX', 'HSL'] as const;
+
+export function RGBToHEX({ r, g, b }: RGB) {
+    return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+export function HEXToRGB(hex: string): RGB | null {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, (_, r, g, b) => r + r + g + g + b + b);
+
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+        ? {
+              r: parseInt(result[1], 16),
+              g: parseInt(result[2], 16),
+              b: parseInt(result[3], 16),
+          }
+        : null;
+}
+
+export function RGBToHSL({ r, g, b }: RGB): HSL {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+    const l = Math.max(r, g, b);
+    const s = l - Math.min(r, g, b);
+    const h = s
+        ? l === r
+            ? (g - b) / s
+            : l === g
+            ? 2 + (b - r) / s
+            : 4 + (r - g) / s
+        : 0;
+    return {
+        h: 60 * h < 0 ? 60 * h + 360 : 60 * h,
+        s: 100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0),
+        l: (100 * (2 * l - s)) / 2,
+    };
+}
+
+export function isRGB(color: any): color is RGB {
+    return (<RGB>color).r !== undefined;
+}
+
+export function isHSL(color: any): color is HSL {
+    return (<HSL>color).h !== undefined;
+}
+
+export function isHEX(color: any): color is HEX {
+    return typeof color === 'string';
 }

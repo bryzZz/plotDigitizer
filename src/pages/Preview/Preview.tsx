@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Header, PlotPreview, Sidebar } from '../../components';
 import { PreviewContextProvider } from '../../context/PreviewContext';
 import { useGetColor } from '../../hooks/useGetColor';
@@ -30,26 +30,25 @@ export const Preview: React.FC<PreviewProps> = () => {
     const canvasHeight = imgRef.current.height;
 
     const handleSubmit = () => {
-        const body = {
-            image: imgCanvasRef!.current
-                ?.toDataURL()
-                .replace(/^data:image\/(png|jpg);base64,/, ''),
-            type: plotType,
-            color: [colors[1], colors[0]],
-            dots: dots,
-        };
-        fetch('http://127.0.0.1:5000', {
-            method: 'POST',
-            body: JSON.stringify(body),
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                console.log(res);
-                console.log(res.dataset.map((item: any) => item[0]));
-                console.log(res.dataset.map((item: any) => item[1]));
-
-                alert(res);
-            });
+        // const body = {
+        //     image: imgCanvasRef!.current
+        //         ?.toDataURL()
+        //         .replace(/^data:image\/(png|jpg);base64,/, ''),
+        //     type: plotType,
+        //     color: [colors[1], colors[0]],
+        //     dots: dots,
+        // };
+        // fetch('http://127.0.0.1:5000', {
+        //     method: 'POST',
+        //     body: JSON.stringify(body),
+        // })
+        //     .then((res) => res.json())
+        //     .then((res) => {
+        //         console.log(res);
+        //         console.log(res.dataset.map((item: any) => item[0]));
+        //         console.log(res.dataset.map((item: any) => item[1]));
+        //         alert(res);
+        //     });
     };
 
     // useEffect(() => {

@@ -1,51 +1,61 @@
 import React, { useState } from 'react';
-import { DominantColor } from '../../types';
+import { RGB } from '../../types';
+import { ColorModal } from '../ColorModal/ColorModal';
 import './style.css';
 
 interface ColorPickerProps {
+    title: string;
     color: string;
-    variants: DominantColor[];
     onChange: (color: string) => void;
     onEyedrop: () => void;
 }
 
 export const ColorPicker: React.FC<ColorPickerProps> = ({
+    title,
     color,
-    variants,
     onChange,
     onEyedrop,
 }) => {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     const handleClick = () => {
-        setIsOpen((p) => !p);
+        setShowModal(true);
+    };
+
+    const handleClickEyedrop = () => {
+        setShowModal(false);
+        onEyedrop();
+    };
+
+    const handleDominantColorClick = ({ r, g, b }: RGB) => {
+        setShowModal(false);
+        onChange(`rgb(${r},${g},${b})`);
+    };
+
+    const handleCloseModal = ({ r, g, b }: RGB) => {
+        setShowModal(false);
+        onChange(`rgb(${r},${g},${b})`);
     };
 
     return (
-        <div
-            className="ColorPicker"
-            data-color={color}
-            onClick={handleClick}
-            style={{
-                backgroundColor: color,
-            }}
-        >
-            {color === '' ? <span>none</span> : ''}
-            <div className={`ColorPicker__popup ${isOpen ? 'open' : ''}`}>
-                {variants.map(({ r, g, b }, i) => (
-                    <div
-                        key={i}
-                        onClick={() => onChange(`rgb(${r},${g},${b})`)}
-                        style={{
-                            backgroundColor: `rgb(${r},${g},${b})`,
-                        }}
-                    ></div>
-                ))}
-                <div
-                    className="ColorPicker__eyedrop"
-                    onClick={() => onEyedrop()}
-                ></div>
+        <>
+            <div
+                className="ColorPicker"
+                data-color={color}
+                onClick={handleClick}
+                style={{
+                    backgroundColor: color,
+                }}
+            >
+                {color === '' ? <span>none</span> : ''}
             </div>
-        </div>
+            <ColorModal
+                title={title}
+                show={showModal}
+                onClose={handleCloseModal}
+                onEyedrop={handleClickEyedrop}
+                onDominantColorClick={handleDominantColorClick}
+            />
+        </>
     );
 };

@@ -1,3 +1,4 @@
+export * from './ColorModal/ColorModal';
 export * from './ColorPicker/ColorPicker';
 export * from './CustomRadio/CustomRadio';
 export * from './Header/Header';
@@ -5,3 +6,4 @@ export * from './MagneticButton/MagneticButton';
 export * from './PlotPreview/PlotPreview';
 export * from './PlotScope/PlotScope';
 export * from './Sidebar/Sidebar';
+export * from './App';

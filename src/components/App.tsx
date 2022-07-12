@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Upload, Preview } from './pages';
+import { Upload, Preview } from '../pages';
 
 interface AppProps {}
 

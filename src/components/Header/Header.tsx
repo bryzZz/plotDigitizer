@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
 
 interface HeaderProps {}
 
-export const Header: React.FC<HeaderProps> = (props) => {
+export const Header: React.FC<HeaderProps> = memo((props) => {
     return (
         <header className="Header">
             <div className="container">
@@ -14,4 +14,4 @@ export const Header: React.FC<HeaderProps> = (props) => {
             </div>
         </header>
     );
-};
+});

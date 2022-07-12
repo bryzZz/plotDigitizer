@@ -1,11 +1,3 @@
-*,
-*::after,
-*::before {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 html {
     --main-pad: 15px;
     --main-container-width: 1200px;
@@ -18,6 +10,7 @@ html {
     --color-primary: rgb(0, 135, 247);
     --color-primary-hover: rgb(35, 152, 248);
     --color-bg: #ffffff;
+    --color-bg-blur: rgba(0, 0, 0, 0.5);
 }
 
 body {

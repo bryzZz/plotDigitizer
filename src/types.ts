@@ -1,3 +1,5 @@
+import { colorVariants } from './utils';
+
 export type DotColor = 'lime' | 'tomato';
 
 export type Coords2 = { x: number; y: number };
@@ -25,6 +27,9 @@ export const enum Button {
 }
 
 export type RGB = { r: number; g: number; b: number };
+export type HSL = { h: number; s: number; l: number };
+export type HEX = `#${string}`;
+
 export type DominantColor = {
     r: number;
     g: number;
@@ -32,3 +37,5 @@ export type DominantColor = {
     pixelsCount: number;
     percentage: number;
 };
+
+export type ColorVariant = typeof colorVariants[number];
