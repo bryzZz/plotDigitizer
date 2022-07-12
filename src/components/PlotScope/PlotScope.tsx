@@ -1,9 +1,9 @@
-import React, { memo } from 'react';
+import React, { useEffect } from 'react';
 import { usePreviewContext } from '../../context/PreviewContext';
 
 interface PlotScopeProps {}
 
-export const PlotScope: React.FC<PlotScopeProps> = memo(() => {
+export const PlotScope: React.FC<PlotScopeProps> = () => {
     const { scopeCanvasRef, imgCanvasRef, dotsCanvasRef, mousePosRef, scale } =
         usePreviewContext();
 
@@ -49,11 +49,16 @@ export const PlotScope: React.FC<PlotScopeProps> = memo(() => {
         context.closePath();
     };
 
-    const animate = () => {
-        draw();
-        requestAnimationFrame(animate);
-    };
-    animate();
+    useEffect(() => {
+        let id: number;
+        const animate = () => {
+            draw();
+            id = requestAnimationFrame(animate);
+        };
+        animate();
+
+        () => cancelAnimationFrame(id);
+    });
 
     return (
         <canvas
@@ -69,4 +74,4 @@ export const PlotScope: React.FC<PlotScopeProps> = memo(() => {
             }}
         ></canvas>
     );
-});
+};

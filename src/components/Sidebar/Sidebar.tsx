@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { MagneticButton, PlotScope } from '../index';
 import { Colors } from './Colors';
 import './style.css';
@@ -7,7 +7,7 @@ interface SidebarProps {
     onSubmit: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ onSubmit }) => {
+export const Sidebar: React.FC<SidebarProps> = memo(({ onSubmit }) => {
     return (
         <aside className="Sidebar">
             <PlotScope />
@@ -24,4 +24,4 @@ export const Sidebar: React.FC<SidebarProps> = ({ onSubmit }) => {
             </MagneticButton>
         </aside>
     );
-};
+});

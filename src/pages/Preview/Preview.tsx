@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Header, PlotPreview, Sidebar } from '../../components';
 import { PreviewContextProvider } from '../../context/PreviewContext';
 import { useGetColor } from '../../hooks/useGetColor';
@@ -29,7 +29,7 @@ export const Preview: React.FC<PreviewProps> = () => {
     const canvasWidth = imgRef.current.width;
     const canvasHeight = imgRef.current.height;
 
-    const handleSubmit = () => {
+    const handleSubmit = useCallback(() => {
         // const body = {
         //     image: imgCanvasRef!.current
         //         ?.toDataURL()
@@ -49,7 +49,7 @@ export const Preview: React.FC<PreviewProps> = () => {
         //         console.log(res.dataset.map((item: any) => item[1]));
         //         alert(res);
         //     });
-    };
+    }, []);
 
     // useEffect(() => {
     //     console.log('Preview update');
