@@ -40,7 +40,7 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({ className }) => {
             const imgContext = imgCanvasRef.current!.getContext('2d');
             const [r, g, b] = imgContext!.getImageData(x, y, 1, 1).data;
             const newColors = [...colors];
-            newColors[selectedColorIndex] = `rgb(${r}, ${g}, ${b})`;
+            newColors[selectedColorIndex] = { r, g, b };
             setColors(newColors);
             setIsEyedrop(false);
             return;
