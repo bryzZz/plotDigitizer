@@ -47,7 +47,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = memo(
                 </div>
                 <ColorModal
                     title={title}
-                    show={showModal}
+                    isOpen={showModal}
                     onClose={handleCloseModal}
                     onEyedrop={handleClickEyedrop}
                     onDominantColorClick={handleDominantColorClick}

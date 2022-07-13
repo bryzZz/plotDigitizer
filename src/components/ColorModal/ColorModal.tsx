@@ -1,21 +1,24 @@
 import React, { memo, useState } from 'react';
+import Modal from 'react-modal';
 import { usePreviewContext } from '../../context/PreviewContext';
 import { useGetColorString } from '../../hooks/useGetColorString';
 import { RGB } from '../../types';
 import { ColorInput } from '../ColorInput/ColorInput';
-import { Modal } from '../Modal/Modal';
+// import { Modal } from '../Modal/Modal';
 import './style.css';
 
 interface ColorModalProps {
     title: string;
-    show: boolean;
+    isOpen: boolean;
     onClose: (color: RGB) => void;
     onDominantColorClick: (color: RGB) => void;
     onEyedrop: () => void;
 }
 
+Modal.setAppElement('#root');
+
 export const ColorModal: React.FC<ColorModalProps> = memo(
-    ({ title, show, onClose, onDominantColorClick, onEyedrop }) => {
+    ({ title, isOpen, onClose, onDominantColorClick, onEyedrop }) => {
         const { dominantColors } = usePreviewContext();
         const [customColor, setCustomColor] = useState<RGB>({
             r: dominantColors[0]?.r || 0,
@@ -33,7 +36,13 @@ export const ColorModal: React.FC<ColorModalProps> = memo(
         };
 
         return (
-            <Modal className="ColorModal" show={show} onClose={handleClose}>
+            <Modal
+                className="ColorModal"
+                overlayClassName="ColorModal__overlay"
+                isOpen={isOpen}
+                onRequestClose={handleClose}
+                contentLabel="Color Modal"
+            >
                 <header className="ColorModal__header">
                     <h1 className="ColorModal__title">{title}</h1>
                 </header>
