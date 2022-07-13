@@ -4,13 +4,12 @@ import { usePreviewContext } from '../../context/PreviewContext';
 import { useGetColorString } from '../../hooks/useGetColorString';
 import { RGB } from '../../types';
 import { ColorInput } from '../ColorInput/ColorInput';
-// import { Modal } from '../Modal/Modal';
 import './style.css';
 
 interface ColorModalProps {
     title: string;
     isOpen: boolean;
-    onClose: (color: RGB) => void;
+    onClose: (color: RGB | null) => void;
     onDominantColorClick: (color: RGB) => void;
     onEyedrop: () => void;
 }
@@ -25,14 +24,24 @@ export const ColorModal: React.FC<ColorModalProps> = memo(
             g: dominantColors[0]?.g || 0,
             b: dominantColors[0]?.b || 0,
         });
+        const [isChange, setIsChange] = useState<boolean>(false);
         const colorString = useGetColorString(customColor);
 
         const handleClose = () => {
-            onClose(customColor);
+            if (isChange) {
+                onClose(customColor);
+            } else {
+                onClose(null);
+            }
         };
 
         const handleClickEyedrop = () => {
             onEyedrop();
+        };
+
+        const handleChangeColor = (value: React.SetStateAction<RGB>) => {
+            setCustomColor(value);
+            setIsChange(true);
         };
 
         return (
@@ -58,7 +67,7 @@ export const ColorModal: React.FC<ColorModalProps> = memo(
                     <ColorInput
                         className="ColorModal__custom-input"
                         value={customColor}
-                        onChange={setCustomColor}
+                        onChange={handleChangeColor}
                     />
                     <h2 className="ColorModal__subtitle">Dominant colors:</h2>
                     <div className="ColorModal__dominant-colors">
