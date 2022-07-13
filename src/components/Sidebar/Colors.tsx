@@ -1,5 +1,6 @@
 import React from 'react';
 import { usePreviewContext } from '../../context/PreviewContext';
+import { RGB } from '../../types';
 import { ColorPicker } from '../ColorPicker/ColorPicker';
 
 interface ColorsProps {}
@@ -13,7 +14,7 @@ export const Colors: React.FC<ColorsProps> = (props) => {
         setSelectedColorIndex(index);
     };
 
-    const handleChangeColor = (color: string, index: number) => {
+    const handleChangeColor = (color: RGB, index: number) => {
         const newColors = [...colors];
         newColors[index] = color;
         setColors(newColors);
@@ -31,7 +32,7 @@ export const Colors: React.FC<ColorsProps> = (props) => {
                 />
             </div>
             {colors.slice(1).map((foregroundColor, i) => (
-                <div key={foregroundColor}>
+                <div key={i}>
                     <p className="Sidebar__block-subtitle">Plot color:</p>
                     <ColorPicker
                         title="Pick plot color"

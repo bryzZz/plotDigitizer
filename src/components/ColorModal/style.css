@@ -1,46 +1,4 @@
-.ColorModal {
-    width: 500px;
-    height: 60%;
-    margin: 0 auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    background-color: var(--color-bg);
-    overflow-x: hidden;
-    transform: translateY(-100%);
-    transition: transform 0.3s ease;
-}
-
-.ColorModal.ReactModal__Content--after-open {
-    transform: translateY(0);
-}
-
-.ColorModal.ReactModal__Content--before-close {
-    /* transition: transform 0.3s ease-in-out; */
-    transform: translateY(-100%);
-}
-
-.ColorModal__overlay {
-    position: fixed;
-    inset: 0px;
-    background-color: var(--color-bg-blur);
-}
-
-.ColorModal__header {
-    padding: 0.3rem 0.8rem;
-    background-color: var(--color-primary);
-}
-
-.ColorModal__main {
-    padding: 0.5rem 0.8rem;
-}
-
 .ColorModal__title {
-    font-size: 1.2rem;
-    color: var(--color-bg);
-}
-
-.ColorModal__subtitle {
     font-size: 1.2rem;
     color: var(--color-title);
     margin-bottom: 0.3rem;

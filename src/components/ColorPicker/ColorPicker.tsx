@@ -5,8 +5,8 @@ import './style.css';
 
 interface ColorPickerProps {
     title: string;
-    color: string;
-    onChange: (color: string) => void;
+    color: RGB | null;
+    onChange: (color: RGB) => void;
     onEyedrop: () => void;
 }
 
@@ -27,15 +27,15 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
         onEyedrop();
     };
 
-    const handleDominantColorClick = ({ r, g, b }: RGB) => {
+    const handleDominantColorClick = (color: RGB) => {
         setShowModal(false);
-        onChange(`rgb(${r},${g},${b})`);
+        onChange(color);
     };
 
     const handleCloseModal = (color: RGB | null) => {
         setShowModal(false);
         if (color) {
-            onChange(`rgb(${color.r},${color.g},${color.b})`);
+            onChange(color);
         }
     };
 
@@ -46,10 +46,12 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
                 data-color={color}
                 onClick={handleClick}
                 style={{
-                    backgroundColor: color,
+                    backgroundColor: color
+                        ? `rgb(${color.r},${color.g},${color.b})`
+                        : 'transparent',
                 }}
             >
-                {color === '' ? <span>none</span> : ''}
+                {!color && <span>none</span>}
             </div>
             <ColorModal
                 title={title}

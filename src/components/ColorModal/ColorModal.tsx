@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import Modal from 'react-modal';
+import { Modal } from '../Modal/Modal';
 import { usePreviewContext } from '../../context/PreviewContext';
 import { useGetColorString } from '../../hooks/useGetColorString';
 import { RGB } from '../../types';
@@ -13,8 +13,6 @@ interface ColorModalProps {
     onDominantColorClick: (color: RGB) => void;
     onEyedrop: () => void;
 }
-
-Modal.setAppElement('#root');
 
 export const ColorModal: React.FC<ColorModalProps> = memo(
     ({ title, isOpen, onClose, onDominantColorClick, onEyedrop }) => {
@@ -46,45 +44,37 @@ export const ColorModal: React.FC<ColorModalProps> = memo(
 
         return (
             <Modal
-                className="ColorModal"
-                overlayClassName="ColorModal__overlay"
+                title={title}
                 isOpen={isOpen}
                 onRequestClose={handleClose}
                 contentLabel="Color Modal"
             >
-                <header className="ColorModal__header">
-                    <h1 className="ColorModal__title">{title}</h1>
-                </header>
-                <main className="ColorModal__main">
-                    <h2 className="ColorModal__subtitle">Custom color:</h2>
-                    <div className="ColorModal__custom-color">
-                        <div style={{ backgroundColor: colorString }}></div>
+                <h2 className="ColorModal__title">Custom color:</h2>
+                <div className="ColorModal__custom-color">
+                    <div style={{ backgroundColor: colorString }}></div>
+                    <div
+                        className="ColorModal__eyedrop"
+                        onClick={handleClickEyedrop}
+                    ></div>
+                </div>
+                <ColorInput
+                    className="ColorModal__custom-input"
+                    value={customColor}
+                    onChange={handleChangeColor}
+                />
+                <h2 className="ColorModal__title">Dominant colors:</h2>
+                <div className="ColorModal__dominant-colors">
+                    {dominantColors.map(({ r, g, b }, i) => (
                         <div
-                            className="ColorModal__eyedrop"
-                            onClick={handleClickEyedrop}
+                            key={i}
+                            className="ColorModal__dominant-color"
+                            onClick={() => onDominantColorClick({ r, g, b })}
+                            style={{
+                                backgroundColor: `rgb(${r},${g},${b})`,
+                            }}
                         ></div>
-                    </div>
-                    <ColorInput
-                        className="ColorModal__custom-input"
-                        value={customColor}
-                        onChange={handleChangeColor}
-                    />
-                    <h2 className="ColorModal__subtitle">Dominant colors:</h2>
-                    <div className="ColorModal__dominant-colors">
-                        {dominantColors.map(({ r, g, b }, i) => (
-                            <div
-                                key={i}
-                                className="ColorModal__dominant-color"
-                                onClick={() =>
-                                    onDominantColorClick({ r, g, b })
-                                }
-                                style={{
-                                    backgroundColor: `rgb(${r},${g},${b})`,
-                                }}
-                            ></div>
-                        ))}
-                    </div>
-                </main>
+                    ))}
+                </div>
             </Modal>
         );
     }

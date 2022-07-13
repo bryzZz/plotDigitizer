@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { Coords2, DominantColor } from '../types';
+import { Coords2, DominantColor, RGB } from '../types';
 
 function createCtx<A extends {} | null>() {
     const ctx = createContext<A | undefined>(undefined);
@@ -21,12 +21,12 @@ interface PreviewContextState {
     scale: number;
     canvasWidth: number;
     canvasHeight: number;
-    colors: string[];
+    colors: Array<RGB | null>;
     selectedColorIndex: number;
     isEyedrop: boolean;
     dominantColors: DominantColor[];
     setScale: React.Dispatch<React.SetStateAction<number>>;
-    setColors: React.Dispatch<React.SetStateAction<string[]>>;
+    setColors: React.Dispatch<React.SetStateAction<Array<RGB | null>>>;
     setIsEyedrop: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectedColorIndex: React.Dispatch<React.SetStateAction<number>>;
     calculateDominantColors: (data: Uint8ClampedArray) => void;
