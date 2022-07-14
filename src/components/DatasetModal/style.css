@@ -1,0 +1,43 @@
+.DatasetModal {
+    width: 70vw;
+    height: 70vh;
+}
+
+.DatasetModal__container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    max-height: 100%;
+}
+
+.DatasetModal__dataset {
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+    height: 100%;
+}
+
+.DatasetModal__dataset-title {
+    color: var(--color-title);
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.DatasetModal__dataset-variables {
+    display: flex;
+    gap: 4px;
+    max-height: 100%;
+    border: 1px solid var(--color-border);
+    /* background-color: var(--color-border); */
+    overflow-y: scroll;
+}
+
+.DatasetModal__dataset-variable {
+    padding: 0.5rem 0.3rem;
+    min-height: 100%;
+    background-color: var(--color-bg);
+}
+
+.DatasetModal__dataset-variable:not(:last-child) {
+    border-right: 1px solid var(--color-border);
+}

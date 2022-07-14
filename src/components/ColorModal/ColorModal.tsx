@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Modal } from '../Modal/Modal';
+import { Modal } from '../UI';
 import { usePreviewContext } from '../../context/PreviewContext';
 import { useGetColorString } from '../../hooks/useGetColorString';
 import { RGB } from '../../types';

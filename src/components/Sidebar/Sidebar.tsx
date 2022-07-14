@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
-import { MagneticButton, PlotScope } from '../index';
+import { PlotScope } from '../index';
+import { Button } from '../UI';
 import { Colors } from './Colors';
 import './style.css';
 
@@ -15,13 +16,9 @@ export const Sidebar: React.FC<SidebarProps> = memo(({ onSubmit }) => {
                 <h4 className="Sidebar__subtitle">Colors management</h4>
                 <Colors />
             </div>
-            <MagneticButton
-                className="Sidebar__submit"
-                onClick={onSubmit}
-                size="small"
-            >
+            <Button className="Sidebar__submit" onClick={onSubmit} size="small">
                 Submit
-            </MagneticButton>
+            </Button>
         </aside>
     );
 });

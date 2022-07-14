@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
-import { Header, CustomRadio, MagneticButton } from '../../components';
+import { Header, PlotTypes } from '../../components';
+import { Button } from '../../components/UI';
 import { useUploadStore } from '../../store/useUploadStore';
-import { PlotTypes } from '../../types';
+import { PlotTypes as TPlotTypes } from '../../types';
 import { ReactComponent as LinePlot } from '../../assets/line-plot.svg';
 import { ReactComponent as LineFilledPlot } from '../../assets/line-filled-plot.svg';
 import { ReactComponent as ScatterPlot } from '../../assets/scatter-plot.svg';
 import { ReactComponent as BarPlot } from '../../assets/bar-plot.svg';
 import './style.css';
 
-const plotTypes: PlotTypes = {
+const plotTypes: TPlotTypes = {
     line: {
         label: 'x-y plot',
         iconComponent: LinePlot,
@@ -75,11 +76,16 @@ export const Upload: React.FC<UploadProps> = (props) => {
         e.preventDefault();
 
         if (imageObjectURL && plotType) {
+            setDots(plotTypes[plotType].dots); // set dots for plot type
             navigate('preview');
-            // set dots for plot type
-            setDots(plotTypes[plotType].dots);
         }
     };
+
+    const handleChangePlotType = useCallback((value: string) => {
+        setPlotType(value);
+    }, []);
+
+    useEffect(() => console.log('Upload update'));
 
     return (
         <div className="Upload">
@@ -105,29 +111,19 @@ export const Upload: React.FC<UploadProps> = (props) => {
                         <h3 className="Upload__subtitle">
                             Choose your plot type
                         </h3>
-                        <div className="Upload__inputs">
-                            {Object.keys(plotTypes).map((plotName) => (
-                                <CustomRadio
-                                    key={plotName}
-                                    checked={plotType === plotName}
-                                    value={plotName}
-                                    onChange={(e) =>
-                                        setPlotType(e.target.value)
-                                    }
-                                    name="plot-type"
-                                    label={plotTypes[plotName].label}
-                                    IconComponent={
-                                        plotTypes[plotName].iconComponent
-                                    }
-                                />
-                            ))}
-                        </div>
-                        <MagneticButton
+                        <PlotTypes
+                            className="Upload__inputs"
+                            plotType={plotType}
+                            plotTypes={plotTypes}
+                            onChange={handleChangePlotType}
+                        />
+                        <Button
                             className="Upload__submit fill"
                             type="submit"
+                            isMagnetic={true}
                         >
                             Submit
-                        </MagneticButton>
+                        </Button>
                     </div>
                 </form>
             </div>

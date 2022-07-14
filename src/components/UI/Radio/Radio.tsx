@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 
-interface CustomRadioProps {
+interface RadioProps {
     value: string;
     checked: boolean;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -10,7 +10,7 @@ interface CustomRadioProps {
     IconComponent: React.FunctionComponent;
 }
 
-export const CustomRadio: React.FC<CustomRadioProps> = ({
+export const Radio: React.FC<RadioProps> = ({
     value,
     checked,
     label,

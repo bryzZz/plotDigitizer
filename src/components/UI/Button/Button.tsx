@@ -1,26 +1,28 @@
 import React, { useRef } from 'react';
 import './style.css';
 
-interface MagneticButtonProps
+interface ButtonProps
     extends React.DetailedHTMLProps<
         React.ButtonHTMLAttributes<HTMLButtonElement>,
         HTMLButtonElement
     > {
     size?: 'small' | 'medium' | 'big';
-    styleType?: 'fill' | 'stroke';
+    fillType?: 'fill' | 'stroke';
+    isMagnetic?: boolean;
 }
 
-export const MagneticButton: React.FC<MagneticButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
     className = '',
     children,
     size = 'medium',
-    styleType = 'fill',
+    fillType = 'fill',
+    isMagnetic = false,
     ...other
 }) => {
     const buttonRef = useRef<HTMLButtonElement>(null);
 
     const handleMouseMove = (e: React.MouseEvent) => {
-        if (!buttonRef.current) return;
+        if (!buttonRef.current || !isMagnetic) return;
 
         const pos = buttonRef.current.getBoundingClientRect();
         const mx = e.clientX - pos.left - pos.width / 2;
@@ -30,22 +32,19 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
             'translate(' + mx * 0.15 + 'px, ' + my * 0.3 + 'px)';
         buttonRef.current.style.transform +=
             'rotate3d(' + mx * -0.1 + ', ' + my * -0.3 + ', 0, 12deg)';
-        // buttonRef.current.children[0].style.transform =
-        //     'translate(' + mx * 0.025 + 'px, ' + my * 0.075 + 'px)';
     };
 
     const handleMouseLeave = () => {
-        if (!buttonRef.current) return;
+        if (!buttonRef.current || !isMagnetic) return;
 
         buttonRef.current.style.transform = 'translate3d(0px, 0px, 0px)';
         buttonRef.current.style.transform += 'rotate3d(0, 0, 0, 0deg)';
-        // buttonRef.current.children[0].style.transform = 'translate3d(0px, 0px, 0px)';
     };
 
     return (
         <button
             ref={buttonRef}
-            className={`MagneticButton MagneticButton__${size} MagneticButton__${styleType} ${className}`}
+            className={`Button Button__${size} Button__${fillType} ${className}`}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             {...other}

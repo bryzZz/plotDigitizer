@@ -12,6 +12,8 @@ export const PlotScope: React.FC<PlotScopeProps> = () => {
         const context = scopeCanvasRef.current?.getContext('2d');
         if (!context) return;
 
+        context.clearRect(0, 0, 250, 250);
+
         // draw scope from image
         context.drawImage(
             imgCanvasRef.current!,

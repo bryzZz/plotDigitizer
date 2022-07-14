@@ -39,3 +39,7 @@ export type DominantColor = {
 };
 
 export type ColorVariant = typeof colorVariants[number];
+
+export type Dataset = {
+    [variable: string]: string[];
+};

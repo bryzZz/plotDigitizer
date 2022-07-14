@@ -6,7 +6,7 @@
     margin-bottom: 20px;
     border-radius: 4px;
     background-color: var(--color-bg);
-    overflow-x: hidden;
+    overflow: hidden;
     transform: translateY(-100%);
     transition: transform 0.3s ease;
 }
@@ -38,4 +38,5 @@
 
 .Modal__main {
     padding: 0.5rem 0.8rem;
+    height: 90%;
 }
