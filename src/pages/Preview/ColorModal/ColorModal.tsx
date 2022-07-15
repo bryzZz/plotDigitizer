@@ -1,9 +1,9 @@
 import React, { memo, useState } from 'react';
-import { Modal } from '../UI';
-import { usePreviewContext } from '../../context/PreviewContext';
-import { useGetColorString } from '../../hooks/useGetColorString';
-import { RGB } from '../../types';
+import { Modal } from '../../../components/UI';
 import { ColorInput } from '../ColorInput/ColorInput';
+import { usePreviewContext } from '../../../context/PreviewContext';
+import { useGetColorString } from '../../../hooks/useGetColorString';
+import { RGB } from '../../../types';
 import './style.css';
 
 interface ColorModalProps {

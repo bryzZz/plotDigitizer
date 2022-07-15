@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Dataset } from '../../types';
-import { Modal } from '../UI';
+import { Dataset } from '../../../types';
+import { Modal } from '../../../components/UI';
 import './style.css';
 
 interface DatasetModalProps {
@@ -19,6 +19,8 @@ export const DatasetModal: React.FC<DatasetModalProps> = ({
     const handleChangeSeparator = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSeparator(e.target.value);
     };
+
+    console.log(dataset);
 
     return (
         <Modal

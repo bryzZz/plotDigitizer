@@ -1,6 +1,6 @@
 import React from 'react';
-import { RGB } from '../../types';
-import { clamp } from '../../utils';
+import { RGB } from '../../../types';
+import { clamp } from '../../../utils';
 import './style.css';
 
 interface ColorInputProps {

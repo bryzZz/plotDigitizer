@@ -9,6 +9,7 @@ html {
     --color-border: #cccccc;
     --color-primary: rgb(0, 135, 247);
     --color-primary-hover: rgb(35, 152, 248);
+    --color-error: tomato;
     --color-bg: #ffffff;
     --color-bg-blur: rgba(0, 0, 0, 0.5);
 }

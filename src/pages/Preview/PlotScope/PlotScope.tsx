@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { usePreviewContext } from '../../context/PreviewContext';
+import { usePreviewContext } from '../../../context/PreviewContext';
 
 interface PlotScopeProps {}
 

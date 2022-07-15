@@ -1,16 +1,16 @@
 import React, { useEffect, useRef } from 'react';
-import { usePreviewContext } from '../../context/PreviewContext';
-import { useUploadStore } from '../../store/useUploadStore';
-import { Button } from '../../types';
-import { distance } from '../../utils';
-import { PlotPreviewSettings } from './PlotPreviewSettings';
+import { usePreviewContext } from '../../../context/PreviewContext';
+import { useUploadStore } from '../../../store/useUploadStore';
+import { Button } from '../../../types';
+import { distance } from '../../../utils';
+import { PlotViewSettings } from '../PlotViewSettings/PlotViewSettings';
 import './style.css';
 
-interface PlotPreviewProps {
+interface PlotViewProps {
     className: string;
 }
 
-export const PlotPreview: React.FC<PlotPreviewProps> = ({ className }) => {
+export const PlotView: React.FC<PlotViewProps> = ({ className }) => {
     const {
         imgCanvasRef,
         dotsCanvasRef,
@@ -150,16 +150,14 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({ className }) => {
     }, [dots, scale]);
 
     useEffect(() => {
-        console.log('PlotPreview update');
+        console.log('PlotView update');
     });
 
     return (
-        <div className={`PlotPreview ${className}`}>
-            <PlotPreviewSettings />
+        <div className={`PlotView ${className}`}>
+            <PlotViewSettings />
             <div
-                className={`PlotPreview__canvases ${
-                    isEyedrop ? 'eyedrop' : ''
-                }`}
+                className={`PlotView__canvases ${isEyedrop ? 'eyedrop' : ''}`}
                 style={{
                     width: canvasWidth * scale,
                     height: canvasHeight * scale,
@@ -170,13 +168,13 @@ export const PlotPreview: React.FC<PlotPreviewProps> = ({ className }) => {
                 onMouseMove={handleMouseMove}
             >
                 <canvas
-                    className="PlotPreview__image"
+                    className="PlotView__image"
                     ref={imgCanvasRef}
                     width={canvasWidth}
                     height={canvasHeight}
                 />
                 <canvas
-                    className="PlotPreview__dots"
+                    className="PlotView__dots"
                     ref={dotsCanvasRef}
                     width={canvasWidth * scale}
                     height={canvasHeight * scale}

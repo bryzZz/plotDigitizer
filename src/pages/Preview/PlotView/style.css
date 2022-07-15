@@ -1,0 +1,32 @@
+.PlotView {
+    height: 100%;
+    width: 100%;
+
+    overflow: scroll;
+}
+
+.PlotView__canvases {
+    position: relative;
+}
+
+.PlotView__canvases > canvas {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    width: 100%;
+}
+
+/* .PlotView__canvases > canvas:nth-child(2) {
+    border: 1px solid black;
+} */
+
+.PlotView .PlotView__image {
+    z-index: 1;
+}
+
+.PlotView .PlotView__dots {
+    z-index: 2;
+}

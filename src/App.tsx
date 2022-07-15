@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Upload, Preview } from '../pages';
+import { Upload, Preview } from './pages';
+import './reset.css';
+import './index.css';
 
 interface AppProps {}
 

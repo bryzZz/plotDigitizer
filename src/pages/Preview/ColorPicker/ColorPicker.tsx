@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RGB } from '../../types';
+import { RGB } from '../../../types';
 import { ColorModal } from '../ColorModal/ColorModal';
 import './style.css';
 

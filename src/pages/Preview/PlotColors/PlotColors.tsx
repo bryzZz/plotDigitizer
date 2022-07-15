@@ -1,11 +1,11 @@
 import React from 'react';
-import { usePreviewContext } from '../../context/PreviewContext';
-import { RGB } from '../../types';
+import { usePreviewContext } from '../../../context/PreviewContext';
+import { RGB } from '../../../types';
 import { ColorPicker } from '../ColorPicker/ColorPicker';
 
-interface ColorsProps {}
+interface PlotColorsProps {}
 
-export const Colors: React.FC<ColorsProps> = (props) => {
+export const PlotColors: React.FC<PlotColorsProps> = (props) => {
     const { colors, setColors, setIsEyedrop, setSelectedColorIndex } =
         usePreviewContext();
 

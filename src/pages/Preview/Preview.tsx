@@ -1,13 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { Header, PlotPreview, Sidebar } from '../../components';
-import { DatasetModal } from '../../components/DatasetModal/DatasetModal';
+import { Header } from '../../components';
+import { PlotView } from './PlotView/PlotView';
+import { Sidebar } from './Sidebar/Sidebar';
+import { DatasetModal } from './DatasetModal/DatasetModal';
 import { PreviewContextProvider } from '../../context/PreviewContext';
+import { useFetch } from '../../hooks/useFetch';
 import { useGetColor } from '../../hooks/useGetColor';
 import { useUploadStore } from '../../store/useUploadStore';
 import { Dataset, RGB } from '../../types';
 import './style.css';
 
 interface PreviewProps {}
+
+interface ApiResponse {
+    dataset: Dataset;
+}
 
 export const Preview: React.FC<PreviewProps> = () => {
     const [imageObjectURL, plotType, dots] = useUploadStore((state) => [
@@ -22,7 +29,9 @@ export const Preview: React.FC<PreviewProps> = () => {
     const [selectedColorIndex, setSelectedColorIndex] = useState<number>(0);
     const [isEyedrop, setIsEyedrop] = useState<boolean>(false);
     const [isDatasetOpen, setIsDatasetOpen] = useState<boolean>(false);
-    const [dataset, setDataset] = useState<Dataset>({});
+    const { fetchData, data } = useFetch<ApiResponse>(
+        'http://127.0.0.1:5000/digit'
+    );
     const imgRef = useRef(new Image());
     const mousePosRef = useRef({ x: 0, y: 0 });
     const imgCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -33,26 +42,19 @@ export const Preview: React.FC<PreviewProps> = () => {
     const canvasWidth = imgRef.current.width;
     const canvasHeight = imgRef.current.height;
 
-    const handleSubmit = () => {
-        const body = {
-            image: imgCanvasRef!.current
-                ?.toDataURL()
-                .replace(/^data:image\/(png|jpg);base64,/, ''),
-            type: plotType,
-            colors,
-            dots,
-        };
-
-        fetch('http://127.0.0.1:5000/digit', {
+    const handleSubmit = async () => {
+        await fetchData({
             method: 'POST',
-            body: JSON.stringify(body),
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                setDataset(res.dataset);
-                setIsDatasetOpen(true);
-                console.log(res);
-            });
+            body: {
+                image: imgCanvasRef!.current
+                    ?.toDataURL()
+                    .replace(/^data:image\/(png|jpg);base64,/, ''),
+                type: plotType,
+                colors,
+                dots,
+            },
+        });
+        setIsDatasetOpen(true);
     };
 
     return (
@@ -80,14 +82,14 @@ export const Preview: React.FC<PreviewProps> = () => {
             <div className="Preview">
                 <Header />
                 <div className="Preview__container container">
-                    <PlotPreview className="canvas-container" />
+                    <PlotView className="canvas-container" />
                     <Sidebar onSubmit={handleSubmit} />
                 </div>
             </div>
             <DatasetModal
                 isOpen={isDatasetOpen}
                 onRequestClose={() => setIsDatasetOpen(false)}
-                dataset={dataset}
+                dataset={data?.dataset || {}}
             />
         </PreviewContextProvider>
     );

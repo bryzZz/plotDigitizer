@@ -1,13 +1,14 @@
 import React from 'react';
-import { usePreviewContext } from '../../context/PreviewContext';
+import { usePreviewContext } from '../../../context/PreviewContext';
+import './style.css';
 
-interface PlotPreviewSettingsProps {}
+interface PlotViewSettingsProps {}
 
-export const PlotPreviewSettings: React.FC<PlotPreviewSettingsProps> = () => {
+export const PlotViewSettings: React.FC<PlotViewSettingsProps> = () => {
     const { setScale } = usePreviewContext();
 
     return (
-        <div className="PlotPreviewSettings">
+        <div className="PlotViewSettings">
             <button onClick={() => setScale((p) => +(p - 0.1).toFixed(2))}>
                 -
             </button>

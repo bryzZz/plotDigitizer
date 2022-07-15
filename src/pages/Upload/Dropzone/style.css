@@ -1,0 +1,17 @@
+.Dropzone {
+    background: var(--color-bg);
+    color: var(--color-hint-text);
+    border: 2px dashed var(--color-border);
+    border-radius: 0.4rem;
+    padding: 1rem;
+    min-height: 10rem;
+    cursor: pointer;
+
+    transition: border-color 0.3s;
+}
+
+.Dropzone:hover,
+.Dropzone:focus,
+.Dropzone.dragover {
+    border-color: var(--color-primary);
+}

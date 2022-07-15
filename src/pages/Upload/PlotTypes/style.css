@@ -1,0 +1,6 @@
+.PlotTypes {
+    display: flex;
+    gap: 0.7rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}

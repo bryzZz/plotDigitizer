@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
-import { PlotScope } from '../index';
-import { Button } from '../UI';
-import { Colors } from './Colors';
+import { Button } from '../../../components/UI';
+import { PlotScope } from '../PlotScope/PlotScope';
+import { PlotColors } from '../PlotColors/PlotColors';
 import './style.css';
 
 interface SidebarProps {
@@ -14,7 +14,7 @@ export const Sidebar: React.FC<SidebarProps> = memo(({ onSubmit }) => {
             <PlotScope />
             <div className="Sidebar__block">
                 <h4 className="Sidebar__subtitle">Colors management</h4>
-                <Colors />
+                <PlotColors />
             </div>
             <Button className="Sidebar__submit" onClick={onSubmit} size="small">
                 Submit

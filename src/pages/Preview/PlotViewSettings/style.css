@@ -1,37 +1,4 @@
-.PlotPreview {
-    height: 100%;
-    width: 100%;
-
-    overflow: scroll;
-}
-
-.PlotPreview__canvases {
-    position: relative;
-}
-
-.PlotPreview__canvases > canvas {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    width: 100%;
-}
-
-/* .PlotPreview__canvases > canvas:nth-child(2) {
-    border: 1px solid black;
-} */
-
-.PlotPreview .PlotPreview__image {
-    z-index: 1;
-}
-
-.PlotPreview .PlotPreview__dots {
-    z-index: 2;
-}
-
-.PlotPreviewSettings {
+.PlotViewSettings {
     position: absolute;
     top: 5px;
     right: calc(var(--sidebar-width) + 45px);
@@ -47,7 +14,7 @@
     z-index: 100;
 }
 
-.PlotPreviewSettings > button {
+.PlotViewSettings > button {
     font-size: 1rem;
     font-family: inherit;
     font-weight: 400;
@@ -63,15 +30,15 @@
     transition: background-color 0.3s;
 }
 
-.PlotPreviewSettings > button:hover {
+.PlotViewSettings > button:hover {
     background-color: var(--color-primary-hover);
 }
 
-.PlotPreviewSettings > button:nth-child(1),
-.PlotPreviewSettings > button:nth-child(2) {
+.PlotViewSettings > button:nth-child(1),
+.PlotViewSettings > button:nth-child(2) {
     width: 1.3rem;
 }
 
-.PlotPreviewSettings > button:nth-child(3) {
+.PlotViewSettings > button:nth-child(3) {
     font-size: 0.9rem;
 }
